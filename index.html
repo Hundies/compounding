@@ -656,21 +656,22 @@ vp.addEventListener('touchend',()=>{if(tx==null)return;tx=null;if(!hz)return;con
 /* ---------- wiring ---------- */
 let cur=0;const rall=()=>{rP();rF();r0();r1();rb();rp();if(CALW.parentNode&&CALW.parentNode.id=='mb')rc()};
 function go(t,sk){cur=t;$$('.tab').forEach((e,i)=>e.classList.toggle('on',i==t));$$('#nv button').forEach((e,i)=>e.classList.toggle('on',i==t));$('main').scrollTop=0}
+const af=()=>{const i=[...$$('#mb input')].find(x=>!['date','range','checkbox','file','hidden'].includes(x.type)&&x.offsetParent);if(i)i.focus()};
 document.addEventListener('click',e=>{const c=s=>e.target.closest(s);let b;
  if(c('#gear'))opt();else if(c('#calc'))calc();
  else if(b=c('[data-t]'))go(+b.dataset.t);
- else if(c('#fab'))edit();
+ else if(c('#fab')){edit();af()}
  else if(c('#calbtn'))openCal();
  else if(c('#cal_x'))$('#md').classList.remove('on');
- else if(c('#btadd'))btEdit(null,'in');
- else if(c('#fxadd'))fxEdit(null);
- else if(c('#pfadd'))feEdit(null);
+ else if(c('#btadd')){btEdit(null,'in');af()}
+ else if(c('#fxadd')){fxEdit(null);af()}
+ else if(c('#pfadd')){feEdit(null);af()}
  else if(b=c('[data-feid]'))feEdit(b.dataset.feid);
  else if(b=c('[data-fid]'))fxEdit(b.dataset.fid);
  else if(b=c('[data-fm]')){if(!b.disabled){const[y,m]=fxM.split('-').map(Number),d=new Date(y,m-1+ +b.dataset.fm,1);fxM=d.getFullYear()+'-'+pad(d.getMonth()+1);rF()}}
  else if(b=c('#fxmrst')){const m=fxM;if(b.dataset.a){S.fx=S.fx.filter(x=>!x.d.startsWith(m));save();rF()}else{b.dataset.a=1;b.textContent='한 번 더 누르면 '+(+m.slice(5))+'월 기록이 삭제돼요';setTimeout(()=>{if(b.isConnected){delete b.dataset.a;b.textContent=(+m.slice(5))+'월 기록 초기화'}},4000)}}
  else if(b=c('#fxarst')){if(b.dataset.a){S.fx=[];save();rF()}else{b.dataset.a=1;b.textContent='한 번 더 누르면 FX 기록이 모두 삭제돼요';setTimeout(()=>{if(b.isConnected){delete b.dataset.a;b.textContent='FX 전체 초기화'}},4000)}}
- else if(c('#ptadd'))ptEdit();
+ else if(c('#ptadd')){ptEdit();af()}
  else if(b=c('#p0rst')){if(b.dataset.a){S.i=[];S.h=[];S.cl={a:'',w:{}};save();rall()}else{b.dataset.a=1;b.textContent='한 번 더 누르면 종목과 기록이 모두 삭제돼요';setTimeout(()=>{if(b.isConnected){delete b.dataset.a;b.textContent='장기적립 초기화'}},4000)}}
  else if(b=c('#bmrst')){const m=btM;if(b.dataset.a){S.bt=S.bt.filter(x=>!x.d.startsWith(m));save();rb()}else{b.dataset.a=1;b.textContent='한 번 더 누르면 '+(+m.slice(5))+'월 기록이 삭제돼요';setTimeout(()=>{if(b.isConnected){delete b.dataset.a;b.textContent=(+m.slice(5))+'월 기록 초기화'}},4000)}}
  else if(b=c('#barst')){if(b.dataset.a){S.bt=[];save();rb()}else{b.dataset.a=1;b.textContent='한 번 더 누르면 단타 기록이 모두 삭제돼요';setTimeout(()=>{if(b.isConnected){delete b.dataset.a;b.textContent='단타 전체 초기화'}},4000)}}
