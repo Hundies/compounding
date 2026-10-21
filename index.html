@@ -126,7 +126,7 @@ if(!S.pt||typeof S.pt!='object')S.pt={};['test','pa'].forEach(k=>{if(!Array.isAr
 if(S.demo){S.i=S.i.filter(x=>!/^s\d$/.test(x.id));S.h=[];delete S.demo}
 const save=()=>{try{localStorage.setItem('inv1',JSON.stringify(S))}catch(e){}};
 const mul=h=>h.c=='USD'?S.rate:1,val=h=>(+h.v||0)*mul(h);
-function mig(){S.i.forEach(h=>{if(h.v==null)h.v=(+h.q||0)*(+h.p||0);if(!CATS[h.cat])h.cat='테스터';if(!Array.isArray(h.w))h.w=(h.w!=null&&h.w!==''&&isFinite(+h.w))?[{d:todayS(),a:+h.w}]:[];if(!Array.isArray(h.e))h.e=+h.v?[{d:todayS(),a:+h.v}]:[];h.v=Math.round(h.e.reduce((t,x)=>t+(+x.a||0),0)*100)/100})}
+function mig(){S.pf.forEach(x=>{if(x.u!='w'){x.a=Math.round((+x.a||0)*(S.rate||1380));x.u='w'}});S.i.forEach(h=>{if(h.v==null)h.v=(+h.q||0)*(+h.p||0);if(!CATS[h.cat])h.cat='테스터';if(!Array.isArray(h.w))h.w=(h.w!=null&&h.w!==''&&isFinite(+h.w))?[{d:todayS(),a:+h.w}]:[];if(!Array.isArray(h.e))h.e=+h.v?[{d:todayS(),a:+h.v}]:[];h.v=Math.round(h.e.reduce((t,x)=>t+(+x.a||0),0)*100)/100})}
 const tot=()=>S.i.reduce((t,h)=>t+val(h),0);
 const sumTo=(h,d)=>(h.e||[]).reduce((t,x)=>x.d<=d?t+x.a:t,0);
 const evAt=(h,d)=>{let L=null;(h.w||[]).forEach(x=>{if(x.d<=d&&(!L||x.d>=L.d))L=x});return L?L.a+(h.e||[]).reduce((t,x)=>x.d>L.d&&x.d<=d?t+x.a:t,0):sumTo(h,d)};
@@ -484,19 +484,19 @@ function ptEdit(id){
  $('#md').classList.add('on')}
 
 const feeCard=k=>{const FL=S.pf.filter(x=>x.k==k).sort((a,b)=>b.d.localeCompare(a.d)),sum=FL.reduce((t,x)=>t+x.a,0),nm=k=='test'?'Eval':'PA';
- return`<div style="display:flex;align-items:center;justify-content:space-between;margin-top:26px;padding:0 2px"><div><span class="sb" style="font-size:13px">${nm} 비용 (입금)</span><b style="display:block;font-size:20px;margin-top:2px">${usd(sum)}</b></div><button id="pfadd" class="btn g" style="width:auto;margin:0;padding:7px 16px;font-size:13px">+ 추가</button></div>${FL.length?`<div class="card" style="padding:2px 12px;margin-top:8px">${FL.map(x=>`<div class="li" data-feid="${x.id}" style="align-items:center;cursor:pointer"><em>${x.d.slice(5).replace('-','/')}</em><span style="flex:1;color:var(--sb)">${nm} 비용</span><b>${usd(x.a)}</b></div>`).join('')}</div>`:''}`};
+ return`<div style="display:flex;align-items:center;justify-content:space-between;margin-top:26px;padding:0 2px"><div><span class="sb" style="font-size:13px">${nm} 비용 (입금)</span><b style="display:block;font-size:20px;margin-top:2px">₩${fmt(sum)}</b></div><button id="pfadd" class="btn g" style="width:auto;margin:0;padding:7px 16px;font-size:13px">+ 추가</button></div>${FL.length?`<div class="card" style="padding:2px 12px;margin-top:8px">${FL.map(x=>`<div class="li" data-feid="${x.id}" style="align-items:center;cursor:pointer"><em>${x.d.slice(5).replace('-','/')}</em><span style="flex:1;color:var(--sb)">${nm} 비용</span><b>₩${fmt(x.a)}</b></div>`).join('')}</div>`:''}`};
 function feEdit(id){
  const o=S.pf.find(x=>x.id==id),nm=ptK=='test'?'Eval':'PA';
  $('#mb').innerHTML=`<h2 style="font-size:16px;color:var(--tx)">${nm} 비용 ${o?'수정':'추가'}</h2>
  <label class="f">날짜<input id="e_d" type="date" value="${o?o.d:todayS()}"></label>
- <label class="f">${nm} 비용 ($)<input id="e_a" type="number" inputmode="decimal" placeholder="예: 150"></label>
+ <label class="f">${nm} 비용 (원)<input id="e_a" type="number" inputmode="numeric" placeholder="예: 200000"></label>
  <button class="btn" id="e_s" style="margin-top:16px">저장</button>
  ${o?'<button class="btn r" id="e_x" style="margin-top:6px">삭제</button>':''}
  <button class="btn g" id="e_c" style="margin-top:6px">닫기</button>`;
  if(o)$('#e_a').value=o.a;
  $('#e_c').onclick=()=>$('#md').classList.remove('on');
- $('#e_s').onclick=()=>{const d=$('#e_d').value,a=r2c(Math.abs(+$('#e_a').value||0));if(!d||!a){$('#e_a').focus();return}
-  const e={id:o?o.id:'f'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),d,k:o?o.k:ptK,a};
+ $('#e_s').onclick=()=>{const d=$('#e_d').value,a=Math.round(Math.abs(+$('#e_a').value||0));if(!d||!a){$('#e_a').focus();return}
+  const e={id:o?o.id:'f'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),d,k:o?o.k:ptK,a,u:'w'};
   if(o)S.pf[S.pf.indexOf(o)]=e;else S.pf.push(e);save();$('#md').classList.remove('on');rp();rP()};
  if(o)$('#e_x').onclick=function(){if(this.dataset.a){S.pf=S.pf.filter(x=>x!=o);save();$('#md').classList.remove('on');rp();rP()}else{this.dataset.a=1;this.textContent='한 번 더 누르면 삭제돼요';setTimeout(()=>{if(this.isConnected){delete this.dataset.a;this.textContent='삭제'}},4000)}};
  $('#md').classList.add('on')}
@@ -556,7 +556,7 @@ function pfAt(d,last){
  as=last?[tot(),totV()]:[S.i.reduce((t,h)=>t+sumTo(h,d)*mul(h),0),S.i.reduce((t,h)=>t+evAt(h,d)*mul(h),0)],
  bv=sm(S.bt,x=>x.t=='in'||x.t=='out'?x.a:0),bw=sm(S.bt,x=>x.a),
  fv=sm(S.fx,x=>x.t=='pl'?0:x.a),fp=sm(S.fx,x=>x.t=='pl'?x.a:0),
- pv=sm(S.pf,x=>x.a)*R,pw=sm(S.pt.pa,x=>x.a)*R;
+ pv=sm(S.pf,x=>x.a),pw=sm(S.pt.pa,x=>x.a)*R;
  return[['FX','#20c997',fv,fv+fp*R],['프랍 (PA)','#f06595',pv,pw],['코인 단타','#ffa94d',bv,bw],['장기적립식','#5b9bff',as[0],as[1]]]}
 function rP(){
  const ds=[...new Set([...S.i.flatMap(h=>(h.e||[]).filter(x=>+x.a).map(x=>x.d)),...S.bt.map(x=>x.d),...S.fx.map(x=>x.d),...S.pf.map(x=>x.d),...S.pt.pa.map(x=>x.d)])].sort(),
