@@ -459,7 +459,7 @@ function rp(){
  <div style="margin-top:12px">${sr('거래 수',N+'회 (승 '+W+' · 패 '+Ls+')')}${sr('승률',N?(W/N*100).toFixed(1).replace(/\.0$/,'')+'%':'-')}${sr('누적 손익',usdS(pl),cc(pl))}${sr('거래당 평균',N?usdS(r2c(pl/N)):'-',N?cc(pl):'')}${sr('일관성',cons==null?'-':cons.toFixed(1).replace(/\.0$/,'')+'% / 한도 '+(PCON*100)+'%',cons>PCON*100?'#ff5a5f':'')}${cons>PCON*100?sr('필요 수익',usd(needT)+' 이상',''):''}${sr('MDD',usd(mdd)+' / '+usd(PD),mdd/PD>=.7?'#ff5a5f':'')}${k=='test'?sr('V3 테스트',N>=30?'달성':(30-N)+'회 남음')+sr('예상 통과일',ptEta(L,pl,TG)[0]):''}</div>
  <div class="mh" style="margin-top:22px"><button data-pm="-1">◀</button><span>${ptM.slice(0,4)}년 ${+ptM.slice(5)}월</span><button data-pm="1">▶</button></div>
  <div class="rs"><div><span class="sb">월 손익</span><b style="color:${cc(mPl)}">${usdS(mPl)}</b></div><div><span class="sb">월 승/패</span><b>${mW}승 ${mL}패</b></div></div>
- <div class="card" style="padding:2px 12px;margin-top:10px">${rows||'<div class="empty" style="padding:24px 10px">이 달에는 기록이 없어요</div>'}</div>${feeCard(k)}${L.length?`<button class="btn r" id="ptrst" style="margin-top:26px">${k=='test'?'Eval':'PA'} 초기화</button>`:''}`;
+ <div class="card" style="padding:2px 12px;margin-top:10px">${rows||'<div class="empty" style="padding:24px 10px">이 달에는 기록이 없어요</div>'}</div>${feeCard(k)}${k=='pa'?feeCard('out'):''}${L.length?`<button class="btn r" id="ptrst" style="margin-top:26px">${k=='test'?'Eval':'PA'} 초기화</button>`:''}`;
  const w=$('#ptw');if(w)w.scrollLeft=w.scrollWidth}
 function ptEdit(id){
  const L=S.pt[ptK],o=L.find(x=>x.id==id),pv=()=>r2c(prevBal(L,$('#p_d').value||todayS(),o,PB));
@@ -483,20 +483,20 @@ function ptEdit(id){
  if(o)$('#p_x').onclick=function(){if(this.dataset.a){S.pt[ptK]=L.filter(x=>x!=o);save();$('#md').classList.remove('on');rp()}else{this.dataset.a=1;this.textContent='한 번 더 누르면 삭제돼요';setTimeout(()=>{if(this.isConnected){delete this.dataset.a;this.textContent='삭제'}},4000)}};
  $('#md').classList.add('on')}
 
-const feeCard=k=>{const FL=S.pf.filter(x=>x.k==k).sort((a,b)=>b.d.localeCompare(a.d)),sum=FL.reduce((t,x)=>t+x.a,0),nm=k=='test'?'Eval':'PA';
- return`<div style="display:flex;align-items:center;justify-content:space-between;margin-top:26px;padding:0 2px"><div><span class="sb" style="font-size:13px">${nm} 비용 (입금)</span><b style="display:block;font-size:20px;margin-top:2px">₩${fmt(sum)}</b></div><button id="pfadd" class="btn g" style="width:auto;margin:0;padding:7px 16px;font-size:13px">+ 추가</button></div>${FL.length?`<div class="card" style="padding:2px 12px;margin-top:8px">${FL.map(x=>`<div class="li" data-feid="${x.id}" style="align-items:center;cursor:pointer"><em>${x.d.slice(5).replace('-','/')}</em><span style="flex:1;color:var(--sb)">${nm} 비용</span><b>₩${fmt(x.a)}</b></div>`).join('')}</div>`:''}`};
-function feEdit(id){
- const o=S.pf.find(x=>x.id==id),nm=ptK=='test'?'Eval':'PA';
- $('#mb').innerHTML=`<h2 style="font-size:16px;color:var(--tx)">${nm} 비용 ${o?'수정':'추가'}</h2>
+const feeCard=k=>{const FL=S.pf.filter(x=>x.k==k).sort((a,b)=>b.d.localeCompare(a.d)),sum=FL.reduce((t,x)=>t+x.a,0),nm=(K=>K=='test'?'Eval 비용':K=='pa'?'PA 비용':'PA 출금')(k);
+ return`<div style="display:flex;align-items:center;justify-content:space-between;margin-top:26px;padding:0 2px"><div><span class="sb" style="font-size:13px">${nm} ${k=='out'?'(+)':'(입금)'}</span><b style="display:block;font-size:20px;margin-top:2px">₩${fmt(sum)}</b></div><button id="${k=='out'?'poadd':'pfadd'}" class="btn g" style="width:auto;margin:0;padding:7px 16px;font-size:13px">+ 추가</button></div>${FL.length?`<div class="card" style="padding:2px 12px;margin-top:8px">${FL.map(x=>`<div class="li" data-feid="${x.id}" style="align-items:center;cursor:pointer"><em>${x.d.slice(5).replace('-','/')}</em><span style="flex:1;color:var(--sb)">${nm}</span><b>₩${fmt(x.a)}</b></div>`).join('')}</div>`:''}`};
+function feEdit(id,kk){
+ const o=S.pf.find(x=>x.id==id),K=o?o.k:(kk||ptK),nm=(K=>K=='test'?'Eval 비용':K=='pa'?'PA 비용':'PA 출금')(K);
+ $('#mb').innerHTML=`<h2 style="font-size:16px;color:var(--tx)">${nm} ${o?'수정':'추가'}</h2>
  <label class="f">날짜<input id="e_d" type="date" value="${o?o.d:todayS()}"></label>
- <label class="f">${nm} 비용 (원)<input id="e_a" type="number" inputmode="numeric" placeholder="예: 200000"></label>
+ <label class="f">${nm} (원)<input id="e_a" type="number" inputmode="numeric" placeholder="예: 200000"></label>
  <button class="btn" id="e_s" style="margin-top:16px">저장</button>
  ${o?'<button class="btn r" id="e_x" style="margin-top:6px">삭제</button>':''}
  <button class="btn g" id="e_c" style="margin-top:6px">닫기</button>`;
  if(o)$('#e_a').value=o.a;
  $('#e_c').onclick=()=>$('#md').classList.remove('on');
  $('#e_s').onclick=()=>{const d=$('#e_d').value,a=Math.round(Math.abs(+$('#e_a').value||0));if(!d||!a){$('#e_a').focus();return}
-  const e={id:o?o.id:'f'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),d,k:o?o.k:ptK,a,u:'w'};
+  const e={id:o?o.id:'f'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),d,k:K,a,u:'w'};
   if(o)S.pf[S.pf.indexOf(o)]=e;else S.pf.push(e);save();$('#md').classList.remove('on');rp();rP()};
  if(o)$('#e_x').onclick=function(){if(this.dataset.a){S.pf=S.pf.filter(x=>x!=o);save();$('#md').classList.remove('on');rp();rP()}else{this.dataset.a=1;this.textContent='한 번 더 누르면 삭제돼요';setTimeout(()=>{if(this.isConnected){delete this.dataset.a;this.textContent='삭제'}},4000)}};
  $('#md').classList.add('on')}
@@ -556,10 +556,10 @@ function pfAt(d,last){
  as=last?[tot(),totV()]:[S.i.reduce((t,h)=>t+sumTo(h,d)*mul(h),0),S.i.reduce((t,h)=>t+evAt(h,d)*mul(h),0)],
  bv=sm(S.bt,x=>x.t=='in'||x.t=='out'?x.a:0),bw=sm(S.bt,x=>x.a),
  fv=sm(S.fx,x=>x.t=='pl'?0:x.a),fp=sm(S.fx,x=>x.t=='pl'?x.a:0),
- pv=sm(S.pf,x=>x.a),pw=sm(S.pt.pa,x=>x.a)*R;
+ pv=sm(S.pf,x=>x.k=='out'?0:x.a),pw=sm(S.pf,x=>x.k=='out'?x.a:0);
  return[['FX','#20c997',fv,fv+fp*R],['프랍 (PA)','#f06595',pv,pw],['코인 단타','#ffa94d',bv,bw],['장기적립식','#5b9bff',as[0],as[1]]]}
 function rP(){
- const ds=[...new Set([...S.i.flatMap(h=>(h.e||[]).filter(x=>+x.a).map(x=>x.d)),...S.bt.map(x=>x.d),...S.fx.map(x=>x.d),...S.pf.map(x=>x.d),...S.pt.pa.map(x=>x.d)])].sort(),
+ const ds=[...new Set([...S.i.flatMap(h=>(h.e||[]).filter(x=>+x.a).map(x=>x.d)),...S.bt.map(x=>x.d),...S.fx.map(x=>x.d),...S.pf.map(x=>x.d)])].sort(),
  N=ds.length,K=Math.min(N,10),pts=[],sum=a=>a.reduce((t,q)=>[t[0]+q[2],t[1]+q[3]],[0,0]);
  if(N){pts.push({d:ds[0],v:0,w:0,lab:'시작'});for(let k=1;k<=K;k++){const d=ds[Math.ceil(k*N/K)-1],q=sum(pfAt(d,k==K));pts.push({d,v:Math.round(q[0]),w:Math.round(q[1])})}}
  const D=x=>new Date(x+'T00:00:00'),P=N?{pts,first:ds[0],sd:Math.round((D(ds[N-1])-D(ds[0]))/864e5)}:null,
@@ -571,7 +571,7 @@ function rP(){
  <div class="card" style="margin-top:22px"><div class="sb" style="font-size:11px;margin:0 0 6px 2px"><i class="dot" style="background:#fff"></i> 총 입금 &nbsp; <i class="dot" style="background:#39ff96"></i><i class="dot" style="background:#ff5a5f;margin-left:2px"></i> 총 평가금액</div>${P?chart10(P,200):'<div class="empty">기록이 생기면 그래프가 보여요</div>'}</div>
  <div style="margin-top:12px">${sr('총 입금','₩'+fmt(V))}${sr('총 손익',sg(pr)+'₩'+fmt(Math.abs(pr)),pnl(V,W))}${sr('ROI',V>0?sp(pr/V*100):'-',pnl(V,W))}</div>
  <div class="card" style="margin-top:16px;padding:8px 12px 2px"><div style="display:flex;font-size:11px;color:var(--sb);padding-bottom:6px"><span style="width:92px;flex:none">구분 (₩)</span><span style="flex:1;text-align:right">입금</span><span style="flex:1;text-align:right">평가</span><span style="flex:1;text-align:right">손익</span></div>${src.map(q=>row(q[0],q[1],q[2],q[3])).join('')}<div style="display:flex;align-items:center;padding:9px 0;border-top:1px solid var(--ln);font-size:12px"><b style="width:92px;flex:none">합계</b><b style="flex:1;text-align:right">${fmt(V)}</b><b style="flex:1;text-align:right">${fmt(W)}</b><b style="flex:1;text-align:right;color:${pnl(V,W)}">${sg(pr)}${fmt(Math.abs(pr))}</b></div></div>
- <div class="sb" style="font-size:11px;margin:8px 4px 0;line-height:1.5">달러 항목은 현재 환율 ₩${fmt(S.rate||1380)}로 환산 · 프랍은 입금=Eval·PA 비용, 평가=PA 손익 (Eval 손익 제외)</div>`}
+ <div class="sb" style="font-size:11px;margin:8px 4px 0;line-height:1.5">달러 항목은 현재 환율 ₩${fmt(S.rate||1380)}로 환산 · 프랍은 입금=Eval·PA 비용, 평가=PA 출금 (손익=출금−비용)</div>`}
 /* ---------- tab : calendar ---------- */
 const WD=['일','월','화','수','목','금','토'],key=(y,m,d)=>y+'-'+pad(m+1)+'-'+pad(d);
 function nth(y,m,w,n){if(n>0){const f=new Date(y,m,1).getDay();return 1+((w-f+7)%7)+(n-1)*7}const l=new Date(y,m+1,0);return l.getDate()-((l.getDay()-w+7)%7)}
@@ -666,6 +666,7 @@ document.addEventListener('click',e=>{const c=s=>e.target.closest(s);let b;
  else if(c('#btadd')){btEdit(null,'in');af()}
  else if(c('#fxadd')){fxEdit(null);af()}
  else if(c('#pfadd')){feEdit(null);af()}
+ else if(c('#poadd')){feEdit(null,'out');af()}
  else if(b=c('[data-feid]'))feEdit(b.dataset.feid);
  else if(b=c('[data-fid]'))fxEdit(b.dataset.fid);
  else if(b=c('[data-fm]')){if(!b.disabled){const[y,m]=fxM.split('-').map(Number),d=new Date(y,m-1+ +b.dataset.fm,1);fxM=d.getFullYear()+'-'+pad(d.getMonth()+1);rF()}}
