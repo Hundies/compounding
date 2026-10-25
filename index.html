@@ -151,6 +151,7 @@ input.cv::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#
 .ln[data-style]{--mk:26px}
 .ln[data-style]::before{position:absolute;left:var(--ind);top:0;width:22px;text-align:center;color:var(--cat);font-weight:700}
 .ln[data-style="bullet"]::before{content:"•";font-size:1.15em}
+.ln[data-style="square"]::before{content:"■";font-size:.72em}
 .ln[data-style="dash"]::before{content:"–"}
 .ln[data-style="number"]::before{content:attr(data-n);font-size:.92em;font-variant-numeric:tabular-nums}
 .ln[data-style="todo"]::before{content:"";width:17px;height:17px;top:.32em;left:calc(var(--ind) + 2px);border:1.8px solid #5a6273;border-radius:50%;box-sizing:border-box}
@@ -810,6 +811,7 @@ document.addEventListener('visibilitychange',()=>{nl();if(!document.hidden&&S.au
   <input class="note-title" id="noteTitle" placeholder="제목" maxlength="60">
   <div class="note-tb" id="noteTb">
     <button class="tbtn" data-act="todo" title="할일 체크"><svg width="17" height="17" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/><polyline points="4.7,8.3 7.1,10.6 11.4,5.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button class="tbtn" data-act="square" title="네모"><svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><rect x="2.5" y="2.5" width="11" height="11" rx="1.2"/></svg></button>
     <button class="tbtn" data-act="bullet" title="점"><svg width="14" height="16" viewBox="0 0 16 18" fill="currentColor"><circle cx="8" cy="3" r="1.9"/><circle cx="8" cy="9" r="1.9"/><circle cx="8" cy="15" r="1.9"/></svg></button>
     <button class="tbtn" data-act="dash" title="대시"><svg width="14" height="16" viewBox="0 0 16 18" fill="currentColor"><rect x="2" y="2" width="12" height="1.6" rx=".8"/><rect x="2" y="8" width="12" height="1.6" rx=".8"/><rect x="2" y="14" width="12" height="1.6" rx=".8"/></svg></button>
     <button class="tbtn" data-act="number" title="숫자"><svg width="14" height="24" viewBox="0 0 16 28" fill="currentColor"><text x="8" y="6.5" style="font-size:6px" font-weight="700" font-family="system-ui" text-anchor="middle">1.</text><text x="8" y="15.5" style="font-size:6px" font-weight="700" font-family="system-ui" text-anchor="middle">2.</text><text x="8" y="24.5" style="font-size:6px" font-weight="700" font-family="system-ui" text-anchor="middle">3.</text></svg></button>
@@ -883,7 +885,7 @@ function previewHtml(html){
     if(l.dataset.style==='number'){for(let k=i+1;k<4;k++)cnt[k]=0;cnt[i]++;l.dataset.n=cnt[i]+'.'}else for(let k=i;k<4;k++)cnt[k]=0});
   const lines=[..._pv.children].filter(l=>l.textContent.trim());
   if(!lines.length)return'';
-  const pre=l=>l.dataset.style==='bullet'?'•':l.dataset.style==='dash'?'–':l.dataset.style==='number'?(l.dataset.n||''):'';
+  const pre=l=>l.dataset.style==='square'?'■':l.dataset.style==='bullet'?'•':l.dataset.style==='dash'?'–':l.dataset.style==='number'?(l.dataset.n||''):'';
   const row=(l,ind)=>{
     const st=l.dataset.size==='large'?' style="font-size:14px"':l.dataset.size==='small'?' style="font-size:11px"':'';
     const p=pre(l);
@@ -1111,7 +1113,7 @@ function updateTb(){
   const ls=selLines(),l=ls[0];
   document.querySelectorAll('#noteTb .tbtn').forEach(b=>{
     const a=b.dataset.act;let on=false;
-    if(l&&['todo','bullet','dash','number'].includes(a))on=ls.every(x=>x.dataset.style===a);
+    if(l&&['todo','square','bullet','dash','number'].includes(a))on=ls.every(x=>x.dataset.style===a);
     if(l&&a==='indent')on=+(l.dataset.indent||0)>0;
     if(l&&a==='bigger')on=l.dataset.size==='large';
     if(l&&a==='smaller')on=l.dataset.size==='small';
@@ -1137,7 +1139,7 @@ $tb.addEventListener('click',e=>{
   if(r&&document.activeElement!==$ed){$ed.focus();const s=getSelection();s.removeAllRanges();s.addRange(r)}
   const ls=selLines();if(!ls.length)return;
   snapH(true);
-  if(['todo','bullet','dash','number'].includes(act)){
+  if(['todo','square','bullet','dash','number'].includes(act)){
     const all=ls.every(l=>l.dataset.style===act);
     ls.forEach(l=>{if(all)delete l.dataset.style;else l.dataset.style=act;if(all||act!=='todo')delete l.dataset.done});
   }
