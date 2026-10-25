@@ -87,6 +87,88 @@ input.cv::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#
 .ct{margin-top:6px}.ct p{margin:3px 0;font-size:13px}.bad{color:var(--up);font-weight:700;margin:3px 0}
 .li{display:flex;gap:10px;padding:8px 0;border-top:1px solid var(--ln);font-size:15px}.li:first-child{border:0}.li em{font-style:normal;color:var(--sb);min-width:66px}#ml h2{font-size:15px;color:var(--tx);margin-bottom:4px}
 #calbtn{width:40px;height:40px;margin:-6px -6px 0 0}#calbtn svg{width:28px;height:28px}
+/* ---------- memo (InnerSync 형식) ---------- */
+.mmo{width:34px;height:34px;margin:-4px 0 0 0;flex:none;border-radius:50%;border:0;background:var(--pn);color:var(--tx);display:flex;align-items:center;justify-content:center;padding:0}
+.mmo svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#mmL{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.6);display:none}
+#mmL.on{display:block}
+#mmL .mp{position:absolute;left:0;right:0;bottom:0;top:calc(env(safe-area-inset-top) + 28px);background:var(--bg);border-radius:18px 18px 0 0;display:flex;flex-direction:column;animation:up .28s cubic-bezier(.2,.9,.3,1)}
+#mmL .mh2{display:flex;align-items:center;gap:8px;padding:14px 16px 6px}
+#mmL .mh2 b{font-size:20px;flex:1;display:flex;align-items:center;gap:8px}
+#mmL .mh2 b i{width:10px;height:10px;border-radius:50%;background:var(--cat)}
+#mmL .mh2 button{border:0;background:var(--pn);color:var(--tx);border-radius:18px;height:34px;padding:0 14px;font:inherit;font-weight:600}
+#mmL .mh2 .madd{width:34px;padding:0;display:flex;align-items:center;justify-content:center;color:var(--cat)}
+#mmL .mh2 .madd svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round}
+#mmBody{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:4px 16px calc(env(safe-area-inset-bottom) + 30px)}
+#mmBody .mempty{color:var(--sb);text-align:center;padding:60px 10px;line-height:1.6}
+.sec-list{position:relative}
+.list-label{display:flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:var(--sb);margin:14px 4px 8px}
+.list-label svg{width:13px;height:13px}
+.mcw{position:relative;margin-bottom:10px;border-radius:12px;transition:transform .25s cubic-bezier(.2,.8,.3,1)}
+.mcw.dragging{transition:none;z-index:20}
+.mcw .swipe-bg{position:absolute;inset:0;border-radius:12px;display:flex;align-items:center;padding:0 22px;color:#fff;font-weight:700;font-size:15px;opacity:0}
+.mcw .swipe-bg.edit{background:#0A84FF;justify-content:flex-start}
+.mcw .swipe-bg.del{background:#FF3B30;justify-content:flex-end}
+.mcw .swipe-bg svg{width:20px;height:20px;margin:0 6px}
+.mcw .entry{position:relative;margin:0;display:flex;flex-direction:column;gap:6px;padding:12px 14px;background:var(--pn);border-radius:12px;transition:transform .25s cubic-bezier(.2,.8,.3,1),box-shadow .2s,scale .2s;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:pan-y}
+.mcw.swiping .entry{transition:none}
+.mcw.lifted .entry{scale:1.03;box-shadow:0 12px 28px rgba(0,0,0,.5)}
+.entry .t{display:flex;align-items:center;gap:6px;font-size:18px;font-weight:600;letter-spacing:-.3px;line-height:1.3}
+.entry .t span{flex:1;min-width:0;word-break:break-all}
+.entry .t span.d{flex:none;font-size:12px;font-weight:500;color:var(--sb)}
+.entry .pin{width:15px;height:15px;flex-shrink:0}
+.entry.pinned{background:var(--soft);box-shadow:inset 0 0 0 1.5px var(--cat)}
+.entry.pinned .pin{color:var(--cat)}
+.mcw.removing{transition:transform .25s,opacity .25s;opacity:0}
+.card-preview{column-count:2;column-gap:8px;margin-top:2px}
+.preview-group{display:flex;flex-direction:column;gap:1px;min-width:0;overflow:hidden;break-inside:avoid}
+.preview-row{display:flex;align-items:baseline;gap:2px;min-width:0}
+.preview-pre{color:#6c7486;font-size:11px;flex-shrink:0}
+.preview-text{font-size:12px;color:#a3abbb;line-height:1.4;word-break:break-word;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+.preview-text.done{text-decoration:line-through;color:#6c7486}
+.preview-indent{padding-left:10px}
+.note{position:fixed;inset:0;background:var(--bg);color:var(--tx);z-index:30;transform:translateY(100%);transition:transform .34s cubic-bezier(.2,.9,.3,1);display:flex;flex-direction:column}
+.note.open{transform:none}
+.note-top{padding:calc(env(safe-area-inset-top) + 8px) 10px 4px;display:flex;align-items:center;gap:8px}
+.note-back{border:none;background:none;color:var(--cat);font-size:17px;font-family:inherit;font-weight:600;display:flex;align-items:center;gap:1px;padding:6px 4px}
+.note-back svg{width:22px;height:22px}
+.note-cat{display:flex;align-items:center;gap:5px;font-size:13px;font-weight:700;color:var(--cat);background:var(--catSoft);padding:4px 10px;border-radius:20px}
+.note-date{font-size:13px;color:var(--sb);margin-left:auto}
+.note-del,.note-pin{border:none;background:none;color:var(--sb);padding:6px}
+.note-del svg,.note-pin svg{width:20px;height:20px}
+.note-pin.on{color:var(--cat)}
+.note-title{border:none!important;background:none!important;font-size:26px!important;font-weight:800;padding:8px 20px 6px!important;margin:0!important;border-radius:0;outline:none;color:var(--tx)}
+.note-title::placeholder{color:#4a5263}
+.note-tb{display:flex;gap:2px;margin:4px 12px 8px;padding:4px;border-radius:14px;overflow-x:auto;scrollbar-width:none;background:var(--pn);flex:none}
+.note-tb::-webkit-scrollbar{display:none}
+.tbtn{flex:0 0 auto;width:38px;height:36px;border:none;background:none;border-radius:10px;color:#c5cbd6;display:flex;align-items:center;justify-content:center;padding:0}
+.tbtn:active{background:var(--pn2)}
+.tbtn.on{background:var(--pn2);color:var(--cat);box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.tb-sep{flex:0 0 1px;background:var(--ln);margin:6px 3px}
+.note-ed{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:4px 20px 45vh;font-size:17px;line-height:1.6;outline:none;word-break:break-all;-webkit-user-select:text;user-select:text}
+.ln{position:relative;min-height:1.6em;--ind:0px;--mk:0px;padding-left:calc(var(--ind) + var(--mk))}
+.ln[data-indent="1"]{--ind:24px}.ln[data-indent="2"]{--ind:48px}.ln[data-indent="3"]{--ind:72px}
+.ln[data-style]{--mk:26px}
+.ln[data-style]::before{position:absolute;left:var(--ind);top:0;width:22px;text-align:center;color:var(--cat);font-weight:700}
+.ln[data-style="bullet"]::before{content:"•";font-size:1.15em}
+.ln[data-style="dash"]::before{content:"–"}
+.ln[data-style="number"]::before{content:attr(data-n);font-size:.92em;font-variant-numeric:tabular-nums}
+.ln[data-style="todo"]::before{content:"";width:17px;height:17px;top:.32em;left:calc(var(--ind) + 2px);border:1.8px solid #5a6273;border-radius:50%;box-sizing:border-box}
+.ln[data-style="todo"][data-done]::before{background:var(--cat) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4L18 8'/%3E%3C/svg%3E") center/12px no-repeat;border-color:var(--cat)}
+.ln[data-done]{color:var(--sb);text-decoration:line-through}
+.ln[data-size="large"]{font-size:21px;font-weight:600}
+.ln[data-size="small"]{font-size:14px}
+.note-ed.is-empty .ln:first-child::after{content:"내용을 입력하세요";position:absolute;left:calc(var(--ind) + var(--mk));top:0;color:#4a5263;pointer-events:none}
+.dlg-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:60;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .18s}
+.dlg-bg.show{opacity:1}
+.dlg{width:270px;background:rgba(40,46,58,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:14px;overflow:hidden;text-align:center;transform:scale(1.1);transition:transform .18s}
+.dlg-bg.show .dlg{transform:none}
+.dlg p{padding:20px 16px 18px;font-size:15px;line-height:1.4;font-weight:600;margin:0;color:var(--tx)}
+.dlg .btns{display:flex;border-top:.5px solid rgba(255,255,255,.15)}
+.dlg button{flex:1;border:none;background:none;font-family:inherit;font-size:17px;padding:12px 0;color:#0A84FF}
+.dlg button+button{border-left:.5px solid rgba(255,255,255,.15);font-weight:600}
+.dlg button.danger{color:#FF453A}
+.note-tb svg text{fill:currentColor}
 </style></head><body>
 <main>
 <section class="tab on" id="tp"><div id="pfs"></div>
@@ -136,7 +218,7 @@ function snap(){const d=todayS(),v=Math.round(tot()),l=S.h[S.h.length-1];if(l&&l
 mig();snap();
 /* ---------- chart ---------- */
 const CALC=`<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2.2"/><rect x="8" y="6" width="8" height="3.2" rx=".6"/><path d="M8.5 13h.01M12 13h.01M15.5 13h.01M8.5 16.5h.01M12 16.5h.01M15.5 16.5h.01" stroke-width="2.2"/></svg>`;
-const GEAR=`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>`;
+const GEAR=`<svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2.3" fill="#181d26"/><circle cx="15.5" cy="12" r="2.3" fill="#181d26"/><circle cx="7.5" cy="18" r="2.3" fill="#181d26"/></svg>`,GEAR_OLD=`<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>`;
 /* ---------- tab 0 ---------- */
 function p10(){
  const ev=[];S.i.forEach(h=>(h.e||[]).forEach(x=>{if(+x.a)ev.push(x.d)}));
@@ -172,7 +254,7 @@ function chart10(P,H=330){
  return`<svg viewBox="0 0 ${W} ${H}" width="100%"><line x1="${pl-8}" x2="${W-pr+8}" y1="${B}" y2="${B}" stroke="#272e3c"/>${fills}<path d="${inv}" fill="none" stroke="${WH}" stroke-width="1.6" stroke-linejoin="round"/>${seg}${dots}${vd}${lab}</svg>`}
 function r0(){
  const I=tot(),V=totV(),P=p10(),pc=pnl(I,V),row=(l,v,c,big)=>`<div style="display:flex;justify-content:flex-start;align-items:baseline;gap:12px;line-height:1.25${big?';margin-bottom:2px':''}"><span class="sb" style="font-size:${big?20:18}px;width:84px;flex:none;text-align:center">${l}</span><b style="font-size:${big?32:24}px;letter-spacing:-.5px;color:${c||'var(--tx)'}">${v}</b></div>`;
- $('#t0').innerHTML=`<div style="display:flex;align-items:flex-start;gap:8px"><div style="flex:1;min-width:0"><div class="sb" style="font-size:13px;margin:4px 0 0 2px">Balance</div><div style="font-size:44px;font-weight:800;letter-spacing:-1.2px;line-height:1.15;color:${pc}">₩${mny(V)}</div></div><div style="display:flex;gap:8px;margin:-4px -4px 0 0;flex:none"><button id="calc" aria-label="비중 계산기">${CALC}</button><button id="gear" aria-label="옵션">${GEAR}</button></div></div>
+ $('#t0').innerHTML=`<div style="display:flex;align-items:flex-start;gap:8px"><div style="flex:1;min-width:0"><div class="sb" style="font-size:13px;margin:4px 0 0 2px">Balance</div><div style="font-size:44px;font-weight:800;letter-spacing:-1.2px;line-height:1.15;color:${pc}">₩${mny(V)}</div></div><div style="display:flex;gap:8px;margin:-4px -4px 0 0;flex:none"><button class="mmo" data-memo="lt" style="margin:0" aria-label="메모"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M9 12h7M9 16h5"/></svg></button><button id="calc" aria-label="비중 계산기">${CALC}</button></div></div>
  <div class="card" style="margin-top:26px"><div class="sb" style="font-size:11px;margin:0 0 6px 2px"><i class="dot" style="background:#fff"></i> 투자금액 &nbsp; <i class="dot" style="background:#39ff96"></i><i class="dot" style="background:#ff5a5f;margin-left:2px"></i> 평가금액</div>${P?chart10(P,200):'<div class="empty">포트폴리오에 날짜별 투자 내역을 입력하면 그래프가 보여요</div>'}</div><div style="margin-top:12px"><div style="display:flex;align-items:baseline;gap:30px;margin:3px 2px 0;font-size:13px"><span class="sb" style="width:55px;flex:none;font-size:11px;display:flex;justify-content:space-between"><span>투</span><span>자</span><span>금</span><span>액</span></span><b style="font-size:16px;color:var(--tx)">₩${fmt(I)}</b></div><div style="display:flex;align-items:baseline;gap:30px;margin:3px 2px 0;font-size:13px"><span class="sb" style="width:55px;flex:none;font-size:11px;display:flex;justify-content:space-between"><span>누</span><span>적</span><span>손</span><span>익</span></span><b style="font-size:16px;color:${pc}">${V-I>0?'+':V-I<0?'-':''}₩${fmt(Math.abs(V-I))}</b></div><div style="display:flex;align-items:baseline;gap:30px;margin:3px 2px 0;font-size:13px"><span class="sb" style="width:55px;flex:none;font-size:11px;display:flex;justify-content:space-between"><span>R</span><span>O</span><span>I</span></span><b style="font-size:16px;color:${pc}">${roeS(I,V)}</b></div><div style="display:flex;align-items:baseline;gap:30px;margin:3px 2px 0;font-size:13px"><span class="sb" style="width:55px;flex:none;font-size:11px;display:flex;justify-content:space-between"><span>현</span><span>재</span><span>환</span><span>율</span></span><b style="font-size:16px;color:var(--tx)">${(+S.rate).toLocaleString('ko-KR',{maximumFractionDigits:2})}</b><span style="display:flex;gap:6px;font-size:12px">${S.auto===false?'<span class="sb">수동 입력</span>':S.rateChg!=null?`<span class="${S.rateChg>=0?'up':'dn'}">${S.rateChg>=0?'▲':'▼'} ${Math.abs(S.rateChg).toFixed(2)}%</span><span class="sb">어제 대비</span>`:''}</span></div></div><div id="pf" style="margin-top:22px"></div>${S.i.length?'<button class="btn r" id="p0rst" style="margin-top:26px">장기적립 초기화</button>':''}`}
 /* ---------- tab 1 ---------- */
 const h2x=n=>Math.round(n).toString(16).padStart(2,'0');
@@ -322,7 +404,7 @@ function opt(){
  <button class="btn r" id="clr" style="margin-top:14px">전체 데이터 초기화</button>
  <button class="btn" id="oz" style="margin-top:6px">닫기</button>`;
  $('#md').classList.add('on');
- const dump=()=>JSON.stringify({i:S.i,h:S.h,bt:S.bt,fx:S.fx,pf:S.pf,pt:S.pt,rate:S.rate,sim:S.sim,auto:S.auto,cl:S.cl},null,1);
+ const dump=()=>JSON.stringify({i:S.i,h:S.h,bt:S.bt,fx:S.fx,pf:S.pf,pt:S.pt,rate:S.rate,sim:S.sim,auto:S.auto,cl:S.cl,memo:S.memo},null,1);
  $('#ox').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([dump()],{type:'application/json'}));a.download='investment-backup-'+todayS()+'.json';document.body.appendChild(a);a.click();a.remove()};
  $('#oc').onclick=async()=>{try{await navigator.clipboard.writeText(dump());alert('백업 내용을 복사했어요')}catch(e){alert('복사가 막혀 있어요. 파일 내보내기를 이용해주세요')}};
  $('#oi').onclick=()=>$('#of').click();
@@ -346,7 +428,7 @@ async function fetchRate(){
 function imp(t){let o;try{o=JSON.parse(t)}catch(e){}
  if(!o||!Array.isArray(o.i)||!Array.isArray(o.h)){alert('올바른 백업 내용이 아니에요');return}
  if(!confirm('현재 데이터를 백업 내용으로 바꿀까요?'))return;
- S={i:o.i,h:o.h,bt:Array.isArray(o.bt)?o.bt:[],fx:Array.isArray(o.fx)?o.fx:[],pf:Array.isArray(o.pf)?o.pf:[],pt:o.pt&&typeof o.pt=='object'?{test:o.pt.test||[],pa:o.pt.pa||[]}:{test:[],pa:[]},rate:+o.rate||1380,auto:o.auto!==false,sim:o.sim||{a:'',m:500000,r:7,y:10},cl:o.cl&&typeof o.cl=='object'?o.cl:undefined};mig();snap();$('#md').classList.remove('on');rall();alert('들여왔어요')}
+ S={i:o.i,h:o.h,bt:Array.isArray(o.bt)?o.bt:[],fx:Array.isArray(o.fx)?o.fx:[],pf:Array.isArray(o.pf)?o.pf:[],pt:o.pt&&typeof o.pt=='object'?{test:o.pt.test||[],pa:o.pt.pa||[]}:{test:[],pa:[]},rate:+o.rate||1380,auto:o.auto!==false,sim:o.sim||{a:'',m:500000,r:7,y:10},cl:o.cl&&typeof o.cl=='object'?o.cl:undefined,memo:o.memo&&typeof o.memo=='object'?o.memo:{}};mig();snap();$('#md').classList.remove('on');rall();alert('들여왔어요')}
 /* ---------- tab 2 : simulation ---------- */
 /* ---------- tab 1 : bitcoin scalping ---------- */
 const BTG=20000000,BTK={in:['입금','var(--tx)'],out:['출금','#74c0fc'],up:['수익','#39ff96'],dn:['손실','#ff5a5f']};
@@ -366,7 +448,7 @@ function rb(){
  kind=x=>x.t=='in'?'in':x.t=='out'?'out':x.a>=0?'up':'dn',
  rows=ML.map((x,i)=>[x,i]).sort((p,q)=>q[0].d.localeCompare(p[0].d)||q[1]-p[1]).map(([x])=>{const k=kind(x);return`<div class="li" data-bid="${x.id}" style="align-items:center;cursor:pointer"><em>${x.d.slice(5).replace('-','/')}</em><span style="flex:1;color:var(--sb)">${BTK[k][0]}</span><b style="color:${BTK[k][1]}">${k=='in'||k=='up'?'+':'-'}₩${fmt(Math.abs(x.a))}</b></div>`}).join(''),
  sr=(l,v,c)=>`<div style="display:flex;align-items:baseline;gap:30px;margin:3px 2px 0;font-size:13px"><span class="sb" style="width:55px;flex:none;font-size:11px;display:flex;justify-content:space-between">${[...l.replace(/ /g,'')].map(c=>`<span>${c}</span>`).join('')}</span><b style="font-size:16px;color:${c||'var(--tx)'}">${v}</b></div>`;
- $('#t1').innerHTML=`<div style="display:flex;align-items:flex-start;gap:8px"><div style="flex:1;min-width:0"><div class="sb" style="font-size:13px;margin:4px 0 0 2px">Balance</div><div style="font-size:44px;font-weight:800;letter-spacing:-1.2px;line-height:1.15;color:${pc}">₩${fmt(bal)}</div></div><button id="btadd" aria-label="기록 추가"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button></div>
+ $('#t1').innerHTML=`<div style="display:flex;align-items:flex-start;gap:8px"><div style="flex:1;min-width:0"><div class="sb" style="font-size:13px;margin:4px 0 0 2px">Balance</div><div style="font-size:44px;font-weight:800;letter-spacing:-1.2px;line-height:1.15;color:${pc}">₩${fmt(bal)}</div></div><div style="display:flex;gap:8px;flex:none"><button class="mmo" data-memo="bt" aria-label="메모"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M9 12h7M9 16h5"/></svg></button><button id="btadd" aria-label="기록 추가"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
  <div style="margin:10px 2px 0"><div style="height:16px;border-radius:8px;background:var(--pn2);overflow:hidden"><div style="height:100%;width:${pct.toFixed(1)}%;background:#39ff96;border-radius:8px"></div></div>
  <div class="sb" style="font-size:12px;margin-top:5px;display:flex;justify-content:space-between"><span>목표 ₩${fmt(BTG)}</span><span>${bal>=BTG?'목표 달성':pct.toFixed(1).replace(/\.0$/,'')+'%'}</span></div></div>
  <div class="card" style="margin-top:22px"><div class="sb" style="font-size:11px;margin:0 0 6px 2px"><i class="dot" style="background:#fff"></i> 입금·출금 반영 &nbsp; <i class="dot" style="background:#39ff96"></i><i class="dot" style="background:#ff5a5f;margin-left:2px"></i> 현재 금액</div>${P?chart10(P,200):'<div class="empty">입금이나 손익을 기록하면 그래프가 보여요</div>'}</div>
@@ -452,7 +534,7 @@ function rp(){
   <div style="position:relative;height:16px;border-radius:8px;background:var(--pn2);margin-top:5px"><div style="height:100%;width:${F.toFixed(1)}%;background:#39ff96;border-radius:8px"></div><i style="position:absolute;left:${T.toFixed(1)}%;top:-3px;width:2px;height:22px;background:#b197fc;transform:translateX(-1px)"></i><i style="position:absolute;right:0;top:-3px;width:2px;height:22px;background:#ffd43b"></i></div>
   <div style="position:relative;height:18px;margin-top:5px"><b style="position:absolute;${fs};font-size:12px;color:${fl};white-space:nowrap">${usdS(d)}</b></div></div>`},
  prog=k=='test'?ebar(pl):pbar(bal);
- $('#t2').innerHTML=`<div style="display:flex;align-items:center;gap:8px"><div class="seg" style="flex:1;margin-top:0"><button data-pk="test" class="${k=='test'?'on':''}">Eval</button><button data-pk="pa" class="${k=='pa'?'on':''}">PA</button></div><button id="ptadd" aria-label="기록 추가"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button></div>
+ $('#t2').innerHTML=`<div style="display:flex;align-items:center;gap:8px"><div class="seg" style="flex:1;margin-top:0"><button data-pk="test" class="${k=='test'?'on':''}">Eval</button><button data-pk="pa" class="${k=='pa'?'on':''}">PA</button></div><button class="mmo" data-memo="prop" aria-label="메모"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M9 12h7M9 16h5"/></svg></button><button id="ptadd" aria-label="기록 추가"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button></div>
  <div class="sb" style="font-size:13px;margin:14px 0 0 2px">Balance</div><div style="font-size:44px;font-weight:800;letter-spacing:-1.2px;line-height:1.15;color:${pc}">${usd(bal)}</div>
  ${prog}
  <div class="card" style="margin-top:20px;padding:12px 8px"><div class="sb" style="font-size:11px;margin:0 0 6px 6px"><i class="dot" style="background:#39ff96"></i><i class="dot" style="background:#ff5a5f;margin-left:2px"></i> 잔고 &nbsp; <i class="dot" style="background:#ff5a5f"></i> MDD &nbsp; <i class="dot" style="background:${k=='test'?'#ffd43b':'#b197fc'}"></i> ${k=='test'?'Profit Target':'Buffer'}</div>${N?ptChart(pts,k):'<div class="empty">거래를 기록하면 그래프가 보여요</div>'}</div>
@@ -519,7 +601,7 @@ function rF(){
  rows=ML.map((x,i)=>[x,i]).sort((p,q)=>q[0].d.localeCompare(p[0].d)||q[1]-p[1]).map(([x])=>{const k=kind(x),isP=x.t=='pl';return`<div class="li" data-fid="${x.id}" style="align-items:center;cursor:pointer"><em>${x.d.slice(5).replace('-','/')}</em><span style="flex:1;color:var(--sb)">${FXK[k][0]}</span><b style="color:${FXK[k][1]}">${k=='in'||k=='up'?'+':'-'}${isP?usdA(x.a):'₩'+fmt(Math.abs(x.a))}</b></div>`}).join(''),
  sr=(l,v,c)=>`<div style="display:flex;align-items:baseline;gap:30px;margin:3px 2px 0;font-size:13px"><span class="sb" style="width:44px;flex:none;font-size:11px;display:flex;justify-content:space-between">${[...l.replace(/ /g,'')].map(c=>`<span>${c}</span>`).join('')}</span><b style="font-size:16px;color:${c||'var(--tx)'}">${v}</b></div>`,
  sg=n=>n>0?'+':n<0?'-':'';
- $('#tf').innerHTML=`<div style="display:flex;align-items:flex-start;gap:8px"><div style="flex:1;min-width:0"><div class="sb" style="font-size:13px;margin:4px 0 0 2px">Balance</div><div style="font-size:44px;font-weight:800;letter-spacing:-1.2px;line-height:1.15;color:${pc}">₩${fmt(bal)}</div><div class="sb" style="font-size:11px;margin:2px 0 0 2px">손익은 현재 환율 ₩${fmt(R)}로 환산</div></div><button id="fxadd" aria-label="기록 추가"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button></div>
+ $('#tf').innerHTML=`<div style="display:flex;align-items:flex-start;gap:8px"><div style="flex:1;min-width:0"><div class="sb" style="font-size:13px;margin:4px 0 0 2px">Balance</div><div style="font-size:44px;font-weight:800;letter-spacing:-1.2px;line-height:1.15;color:${pc}">₩${fmt(bal)}</div><div class="sb" style="font-size:11px;margin:2px 0 0 2px">손익은 현재 환율 ₩${fmt(R)}로 환산</div></div><div style="display:flex;gap:8px;flex:none"><button class="mmo" data-memo="fx" aria-label="메모"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M9 12h7M9 16h5"/></svg></button><button id="fxadd" aria-label="기록 추가"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
  <div class="card" style="margin-top:22px"><div class="sb" style="font-size:11px;margin:0 0 6px 2px"><i class="dot" style="background:#fff"></i> 입금·출금 반영 &nbsp; <i class="dot" style="background:#39ff96"></i><i class="dot" style="background:#ff5a5f;margin-left:2px"></i> 현재 금액</div>${P?chart10(P,200):'<div class="empty">입금이나 손익을 기록하면 그래프가 보여요</div>'}</div>
  <div style="margin-top:12px">${sr('누적 입금','₩'+fmt(dep))}${wd?sr('누적 출금','₩'+fmt(wd),'#74c0fc'):''}${sr('누적 손익',usdSg(pl)+(pl?` <span class="sb" style="font-size:12px;font-weight:400">(${sg(plW)}₩${fmt(Math.abs(plW))})</span>`:''),pnl(0,pl))}${sr('ROI',dep>0?sp(plW/dep*100):'-',pnl(0,pl))}</div>
  <div class="mh" style="margin-top:22px"><button data-fm="-1">◀</button><span>${fxM.slice(0,4)}년 ${+fxM.slice(5)}월</span><button data-fm="1">▶</button></div>
@@ -567,7 +649,7 @@ function rP(){
  sg=n=>n>0?'+':n<0?'-':'',
  sr=(l,v,c)=>`<div style="display:flex;align-items:baseline;gap:30px;margin:3px 2px 0;font-size:13px"><span class="sb" style="width:44px;flex:none;font-size:11px;display:flex;justify-content:space-between">${[...l.replace(/ /g,'')].map(c=>`<span>${c}</span>`).join('')}</span><b style="font-size:16px;color:${c||'var(--tx)'}">${v}</b></div>`,
  row=(n,c,v,w)=>{const p=w-v;return`<div style="display:flex;align-items:center;padding:9px 0;border-top:1px solid var(--ln);font-size:12px"><span style="width:92px;flex:none;display:flex;align-items:center;gap:6px;font-size:12px"><i class="dot" style="background:${c}"></i>${n}</span><span style="flex:1;text-align:right;color:var(--sb)">${fmt(v)}</span><span style="flex:1;text-align:right">${fmt(w)}</span><b style="flex:1;text-align:right;color:${p>0?'#39ff96':p<0?'#ff5a5f':'var(--tx)'}">${sg(p)}${fmt(Math.abs(p))}</b></div>`};
- $('#pfs').innerHTML=`<div style="display:flex;align-items:flex-start;gap:8px"><div style="flex:1;min-width:0"><div class="sb" style="font-size:13px;margin:4px 0 0 2px">Balance</div><div style="font-size:44px;font-weight:800;letter-spacing:-1.2px;line-height:1.15;color:${pnl(V,W)}">₩${mny(W)}</div></div><button id="calbtn" aria-label="미국 휴장일"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M3 15.5h18M9 10v11M15 10v11M8 3v4M16 3v4"/></svg></button></div>
+ $('#pfs').innerHTML=`<div style="display:flex;align-items:flex-start;gap:8px"><div style="flex:1;min-width:0"><div class="sb" style="font-size:13px;margin:4px 0 0 2px">Balance</div><div style="font-size:44px;font-weight:800;letter-spacing:-1.2px;line-height:1.15;color:${pnl(V,W)}">₩${mny(W)}</div></div><div style="display:flex;gap:8px;flex:none;margin:-4px -4px 0 0"><button id="calbtn" aria-label="미국 휴장일" style="margin:0"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M3 15.5h18M9 10v11M15 10v11M8 3v4M16 3v4"/></svg></button><button id="gear" aria-label="옵션">${GEAR}</button></div></div>
  <div class="card" style="margin-top:22px"><div class="sb" style="font-size:11px;margin:0 0 6px 2px"><i class="dot" style="background:#fff"></i> 총 입금 &nbsp; <i class="dot" style="background:#39ff96"></i><i class="dot" style="background:#ff5a5f;margin-left:2px"></i> 총 평가금액</div>${P?chart10(P,200):'<div class="empty">기록이 생기면 그래프가 보여요</div>'}</div>
  <div style="margin-top:12px">${sr('총 입금','₩'+fmt(V))}${sr('총 손익',sg(pr)+'₩'+fmt(Math.abs(pr)),pnl(V,W))}${sr('ROI',V>0?sp(pr/V*100):'-',pnl(V,W))}</div>
  <div class="card" style="margin-top:16px;padding:8px 12px 2px"><div style="display:flex;font-size:11px;color:var(--sb);padding-bottom:6px"><span style="width:92px;flex:none">구분 (₩)</span><span style="flex:1;text-align:right">입금</span><span style="flex:1;text-align:right">평가</span><span style="flex:1;text-align:right">손익</span></div>${src.map(q=>row(q[0],q[1],q[2],q[3])).join('')}<div style="display:flex;align-items:center;padding:9px 0;border-top:1px solid var(--ln);font-size:12px"><b style="width:92px;flex:none">합계</b><b style="flex:1;text-align:right">${fmt(V)}</b><b style="flex:1;text-align:right">${fmt(W)}</b><b style="flex:1;text-align:right;color:${pnl(V,W)}">${sg(pr)}${fmt(Math.abs(pr))}</b></div></div>
@@ -714,4 +796,409 @@ document.addEventListener('change',e=>{if(e.target.id=='rt'){r0();r1()}});
 rall();go(0);setInterval(nl,60000);
 if(S.auto!==false)fetchRate();
 document.addEventListener('visibilitychange',()=>{nl();if(!document.hidden&&S.auto!==false&&Date.now()-(S.rateAt||0)>36e5)fetchRate()});
+</script>
+<div id="mmL"><div class="mp"><div class="mh2"><b id="mlT"></b><button class="madd" id="mlAdd" aria-label="메모 추가"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button><button id="mlX">닫기</button></div><div id="mmBody"></div></div></div>
+<div class="note" id="note">
+  <div class="note-top">
+    <button class="note-back" id="noteBack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>완료</button>
+    <span class="note-cat" id="noteCat"></span>
+    <span class="note-date" id="noteDate"></span>
+    <button class="note-pin" id="notePin" aria-label="고정"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 2.5l6 6-2.2.8-3.6 3.6.4 4.6-1.6 1.6-4.2-4.2-5.6 5.6-1.1-1.1 5.6-5.6L5 9.6 6.6 8l4.6.4 3.6-3.6z"/></svg></button>
+    <button class="note-del" id="noteDel" aria-label="삭제"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></svg></button>
+  </div>
+  <input class="note-title" id="noteTitle" placeholder="제목" maxlength="60">
+  <div class="note-tb" id="noteTb">
+    <button class="tbtn" data-act="todo" title="할일 체크"><svg width="17" height="17" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.5"/><polyline points="4.7,8.3 7.1,10.6 11.4,5.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    <button class="tbtn" data-act="bullet" title="점"><svg width="14" height="16" viewBox="0 0 16 18" fill="currentColor"><circle cx="8" cy="3" r="1.9"/><circle cx="8" cy="9" r="1.9"/><circle cx="8" cy="15" r="1.9"/></svg></button>
+    <button class="tbtn" data-act="dash" title="대시"><svg width="14" height="16" viewBox="0 0 16 18" fill="currentColor"><rect x="2" y="2" width="12" height="1.6" rx=".8"/><rect x="2" y="8" width="12" height="1.6" rx=".8"/><rect x="2" y="14" width="12" height="1.6" rx=".8"/></svg></button>
+    <button class="tbtn" data-act="number" title="숫자"><svg width="14" height="24" viewBox="0 0 16 28" fill="currentColor"><text x="8" y="6.5" style="font-size:6px" font-weight="700" font-family="system-ui" text-anchor="middle">1.</text><text x="8" y="15.5" style="font-size:6px" font-weight="700" font-family="system-ui" text-anchor="middle">2.</text><text x="8" y="24.5" style="font-size:6px" font-weight="700" font-family="system-ui" text-anchor="middle">3.</text></svg></button>
+    <div class="tb-sep"></div>
+    <button class="tbtn" data-act="indent" title="들여쓰기"><svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="1" y1="1" x2="15" y2="1"/><line x1="5" y1="6" x2="15" y2="6"/><line x1="5" y1="11" x2="15" y2="11"/><polyline points="1,4 3,6 1,8" fill="currentColor" stroke="none"/></svg></button>
+    <button class="tbtn" data-act="outdent" title="내어쓰기"><svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="1" y1="1" x2="15" y2="1"/><line x1="5" y1="6" x2="15" y2="6"/><line x1="5" y1="11" x2="15" y2="11"/><polyline points="3,4 1,6 3,8" fill="currentColor" stroke="none"/></svg></button>
+    <div class="tb-sep"></div>
+    <button class="tbtn" data-act="bold" title="굵게"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor"><text x="8" y="13" style="font-size:12px" font-weight="900" font-family="system-ui" text-anchor="middle">B</text></svg></button>
+    <button class="tbtn" data-act="underline" title="밑줄"><svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor"><text x="8" y="11" style="font-size:10.5px" font-weight="700" font-family="system-ui" text-anchor="middle">U</text><rect x="2" y="13" width="12" height="1.3" rx=".65"/></svg></button>
+    <button class="tbtn" data-act="bigger" title="크게"><svg width="16" height="15" viewBox="0 0 16 16" fill="currentColor"><text x="4" y="13" style="font-size:12px" font-weight="700" font-family="system-ui">A</text><text x="11" y="11" style="font-size:6px" font-weight="700" font-family="system-ui">+</text></svg></button>
+    <button class="tbtn" data-act="smaller" title="작게"><svg width="16" height="15" viewBox="0 0 16 16" fill="currentColor"><text x="4" y="13" style="font-size:12px" font-weight="700" font-family="system-ui">A</text><text x="11" y="12" style="font-size:7px" font-weight="700" font-family="system-ui">−</text></svg></button>
+    <div class="tb-sep"></div>
+    <button class="tbtn" data-act="undo" title="되돌리기"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8H17C19.2 8 21 9.8 21 12C21 14.2 19.2 16 17 16H11"/><polyline points="7,4 3,8 7,12"/></svg></button>
+    <button class="tbtn" data-act="selectall" title="전체 선택"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="5" width="6" height="6" rx="1" fill="currentColor"/></svg></button>
+    <button class="tbtn" data-act="erase" title="내용 지우기"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20H7L3 16l10-10 7 7-3.5 3.5"/><path d="M6.5 17.5l4-4"/></svg></button>
+  </div>
+  <div class="note-ed" id="noteEd" contenteditable="true"></div>
+</div>
+<script>
+/* ---------- memo (InnerSync 형식) ---------- */
+(()=>{
+const MEMO_K={fx:['FX','#20c997'],test:['Eval','#f06595'],pa:['PA','#f06595'],bt:['Crypto','#ffa94d'],lt:['Long-term','#5b9bff']};
+const soft=c=>c+'2e';
+const esc2=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const tdy=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const W=['일','월','화','수','목','금','토'];
+const fmtD=s=>{const d=new Date(s+'T00:00:00');return (d.getMonth()+1)+'월 '+d.getDate()+'일 ('+W[d.getDay()]+')'};
+const M=()=>{if(!S.memo||typeof S.memo!='object')S.memo={};Object.keys(MEMO_K).forEach(k=>{if(!Array.isArray(S.memo[k]))S.memo[k]=[]});return S.memo};
+const L=k=>M()[k];
+function ask(msg,o={}){
+  return new Promise(res=>{
+    const bg=document.createElement('div');bg.className='dlg-bg';
+    bg.innerHTML=`<div class="dlg"><p>${msg}</p><div class="btns"><button data-v="0">${o.cancel||'취소'}</button><button data-v="1" class="${o.danger?'danger':''}">${o.ok||'확인'}</button></div></div>`;
+    document.body.appendChild(bg);requestAnimationFrame(()=>bg.classList.add('show'));
+    const done=v=>{bg.classList.remove('show');setTimeout(()=>bg.remove(),180);res(v)};
+    bg.addEventListener('click',e=>{const b=e.target.closest('button');if(b)done(b.dataset.v==='1');else if(e.target===bg)done(false)});
+  });
+}
+let K='fx';
+const $ml=document.getElementById('mmL'),$body=document.getElementById('mmBody');
+const setCat=el=>{el.style.setProperty('--cat',MEMO_K[K][1]);el.style.setProperty('--catSoft',soft(MEMO_K[K][1]))};
+window.openMemo=k=>{K=k;M();setCat($ml);document.getElementById('mlT').innerHTML=`<i></i>${MEMO_K[K][0]} 메모`;refreshList();$ml.classList.add('on');$body.scrollTop=0};
+document.getElementById('mlX').onclick=()=>$ml.classList.remove('on');
+document.getElementById('mlAdd').onclick=()=>openNote();
+$ml.addEventListener('click',e=>{if(e.target===$ml)$ml.classList.remove('on')});
+
+const PIN_SVG='<svg class="pin" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 2.5l6 6-2.2.8-3.6 3.6.4 4.6-1.6 1.6-4.2-4.2-5.6 5.6-1.1-1.1 5.6-5.6L5 9.6 6.6 8l4.6.4 3.6-3.6z"/></svg>';
+// 순서값이 없는 메모는 최신 날짜가 위로 오도록 순서를 매김
+function ensureOrder(){
+  const l=L(K),have=l.filter(e=>typeof e.order==='number');
+  let base=have.length?Math.max(...have.map(e=>e.order))+1:0;
+  l.filter(e=>typeof e.order!=='number').sort((a,b)=>b.date.localeCompare(a.date)||((b.updated||0)-(a.updated||0))).forEach(e=>e.order=base++);
+}
+const topOrder=pinned=>{const l=L(K).filter(e=>!!e.pinned===!!pinned&&typeof e.order==='number');return l.length?Math.min(...l.map(e=>e.order))-1:0};
+function listHtml(){
+  ensureOrder();
+  const all=[...L(K)].sort((a,b)=>a.order-b.order),pins=all.filter(e=>e.pinned),rest=all.filter(e=>!e.pinned);
+  if(!all.length)return `<div class="mempty">${MEMO_K[K][0]} 메모가 없어요.<br>오른쪽 위 + 버튼으로 추가하세요.</div>`;
+  let out='';
+  if(pins.length)out+=`<div class="list-label" style="color:var(--cat)">${PIN_SVG.replace('class="pin"','')}고정됨</div><div class="sec-list" data-sec="pin">${pins.map(entryCard).join('')}</div>`;
+  if(rest.length)out+=`${pins.length?'<div class="list-label">메모</div>':''}<div class="sec-list" data-sec="rest">${rest.map(entryCard).join('')}</div>`;
+  return out;
+}
+const _pv=document.createElement('div');
+// 미리보기: 점/대시/숫자 줄은 묶음의 머리, 바로 아래 들여쓴 줄들은 그 아래 자식
+function previewHtml(html){
+  _pv.innerHTML=html||'';
+  const cnt=[0,0,0,0];
+  [..._pv.children].forEach(l=>{const i=+(l.dataset.indent||0);
+    if(l.dataset.style==='number'){for(let k=i+1;k<4;k++)cnt[k]=0;cnt[i]++;l.dataset.n=cnt[i]+'.'}else for(let k=i;k<4;k++)cnt[k]=0});
+  const lines=[..._pv.children].filter(l=>l.textContent.trim());
+  if(!lines.length)return'';
+  const pre=l=>l.dataset.style==='bullet'?'•':l.dataset.style==='dash'?'–':l.dataset.style==='number'?(l.dataset.n||''):'';
+  const row=(l,ind)=>{
+    const st=l.dataset.size==='large'?' style="font-size:14px"':l.dataset.size==='small'?' style="font-size:11px"':'';
+    const p=pre(l);
+    return `<div class="preview-row${ind?' preview-indent':''}">${p?`<span class="preview-pre">${p}</span>`:''}<span class="preview-text${l.dataset.done!==undefined?' done':''}"${st}>${l.innerHTML}</span></div>`;
+  };
+  let out='<div class="card-preview">',i=0;
+  while(i<lines.length){
+    out+='<div class="preview-group">'+row(lines[i],false);i++;
+    while(i<lines.length&&+(lines[i].dataset.indent||0)>0){out+=row(lines[i],true);i++}
+    out+='</div>';
+  }
+  return out+'</div>';
+}
+function entryCard(e){
+  const d=new Date(e.date+'T00:00:00');
+  return `<div class="mcw" data-id="${e.id}">
+    <div class="swipe-bg edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>편집</div>
+    <div class="swipe-bg del">삭제<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></div>
+    <div class="entry${e.pinned?' pinned':''}" style="--soft:${soft(MEMO_K[K][1])}">
+      <div class="t">${e.pinned?PIN_SVG:''}<span>${esc2(e.title||'제목 없음')}</span><span class="d">${d.getMonth()+1}.${d.getDate()}</span></div>${previewHtml(e.html)}
+    </div>
+  </div>`;
+}
+function refreshList(){$body.innerHTML=listHtml()}
+function togglePin(id){const e=L(K).find(x=>x.id===id);if(!e)return;e.pinned=!e.pinned;e.order=topOrder(e.pinned);save();refreshList()}
+
+// ---------- 카드 제스처 ----------
+// 짧게 탭: 열기 / 좌→우 스와이프: 편집 / 우→좌 스와이프: 삭제
+// 길게 눌렀다 그대로 떼기: 고정·해제 / 길게 눌러서 위아래로 끌기: 순서 바꾸기
+const G={};
+function gStart(x,y,target){
+  const cw=target.closest&&target.closest('.mcw');if(!cw||!$body.contains(cw))return false;
+  Object.assign(G,{cw,card:cw.querySelector('.entry'),x0:x,y0:y,x,y,mode:null,timer:null});
+  G.timer=setTimeout(()=>{if(G.mode===null){G.mode='hold';cw.classList.add('lifted');navigator.vibrate&&navigator.vibrate(12)}},430);
+  return true;
+}
+function gMove(x,y){
+  if(!G.cw)return false;
+  G.x=x;G.y=y;const dx=x-G.x0,dy=y-G.y0;
+  if(G.mode===null){
+    if(Math.hypot(dx,dy)<9)return false;
+    clearTimeout(G.timer);
+    if(Math.abs(dx)>Math.abs(dy)*1.3){G.mode='swipe';G.cw.classList.add('swiping')}
+    else{G.mode='scroll';return false}
+  }
+  if(G.mode==='scroll')return false;
+  if(G.mode==='swipe'){
+    let tx=dx;const lim=130;if(Math.abs(tx)>lim)tx=Math.sign(tx)*(lim+(Math.abs(tx)-lim)*.25);
+    G.card.style.transform=`translateX(${tx}px)`;
+    G.cw.querySelector('.swipe-bg.edit').style.opacity=tx>0?Math.min(1,tx/70):0;
+    G.cw.querySelector('.swipe-bg.del').style.opacity=tx<0?Math.min(1,-tx/70):0;
+    return true;
+  }
+  if(G.mode==='hold'&&Math.hypot(dx,dy)>6)dragBegin();
+  if(G.mode==='drag'){dragMove(dy);return true}
+  return true;
+}
+function gEnd(){
+  if(!G.cw)return;
+  clearTimeout(G.timer);
+  const {cw,card,mode}=G,dx=G.x-G.x0;
+  if(mode===null){G.cw=null;openNote(cw.dataset.id);return}
+  if(mode==='hold'){cw.classList.remove('lifted');G.cw=null;togglePin(cw.dataset.id);return}
+  if(mode==='swipe'){
+    cw.classList.remove('swiping');
+    card.style.transform='';cw.querySelectorAll('.swipe-bg').forEach(b=>b.style.opacity=0);
+    G.cw=null;
+    if(dx>80)setTimeout(()=>openNote(cw.dataset.id),150);
+    else if(dx<-80){
+      ask('이 메모를 삭제할까요?',{ok:'삭제',danger:true}).then(y=>{if(!y)return;
+        card.style.transform='translateX(-110%)';cw.classList.add('removing');
+        setTimeout(()=>{M()[K]=L(K).filter(x=>x.id!==cw.dataset.id);save();refreshList()},250);
+      });
+    }
+    return;
+  }
+  if(mode==='drag'){dragEnd();return}
+  G.cw=null;
+}
+// 끌어서 순서 바꾸기: 끄는 카드는 손가락을 따라오고, 다른 카드들이 비켜서며 자리가 벌어짐
+function dragBegin(){
+  G.mode='drag';
+  G.list=G.cw.parentNode;G.sibs=[...G.list.children];
+  G.from=G.sibs.indexOf(G.cw);G.to=G.from;
+  G.rects=G.sibs.map(n=>n.getBoundingClientRect());
+  G.step=G.rects[G.from].height+10;
+  G.cw.classList.add('dragging');
+}
+function dragMove(dy){
+  const minDy=G.rects[0].top-G.rects[G.from].top,maxDy=G.rects[G.rects.length-1].bottom-G.rects[G.from].bottom;
+  dy=Math.max(minDy-20,Math.min(maxDy+20,dy));
+  G.cw.style.transform=`translateY(${dy}px)`;
+  const mid=G.rects[G.from].top+G.rects[G.from].height/2+dy;
+  let to=G.from;
+  G.rects.forEach((r,i)=>{if(i<G.from&&mid<r.top+r.height*.6)to=Math.min(to,i);if(i>G.from&&mid>r.top+r.height*.4)to=Math.max(to,i)});
+  G.to=to;
+  G.sibs.forEach((n,i)=>{
+    if(n===G.cw)return;
+    let s=0;
+    if(G.from<to&&i>G.from&&i<=to)s=-G.step;
+    if(G.from>to&&i<G.from&&i>=to)s=G.step;
+    n.style.transform=s?`translateY(${s}px)`:'';
+  });
+}
+function dragEnd(){
+  const {cw,from,to,sibs,rects}=G;
+  let target=0;
+  if(to>from)target=rects[to].bottom-rects[from].bottom;
+  if(to<from)target=rects[to].top-rects[from].top;
+  cw.classList.remove('dragging');cw.classList.remove('lifted');
+  cw.style.transform=`translateY(${target}px)`;
+  G.cw=null;
+  setTimeout(()=>{
+    const ids=sibs.map(n=>n.dataset.id);ids.splice(to,0,ids.splice(from,1)[0]);
+    ids.forEach((id,i)=>{const e=L(K).find(x=>x.id===id);if(e)e.order=i});
+    save();refreshList();
+  },to===from?200:260);
+}
+$body.addEventListener('touchstart',e=>{if(e.touches.length===1)gStart(e.touches[0].clientX,e.touches[0].clientY,e.target)},{passive:true});
+$body.addEventListener('touchmove',e=>{if(G.cw&&gMove(e.touches[0].clientX,e.touches[0].clientY))e.preventDefault()},{passive:false});
+$body.addEventListener('touchend',e=>{if(G.cw){if(G.mode!=='scroll')e.preventDefault();gEnd()}},{passive:false});
+$body.addEventListener('touchcancel',()=>{if(G.cw){if(G.mode==='drag')dragEnd();else{G.cw.classList.remove('lifted','swiping');G.card.style.transform='';G.cw=null}clearTimeout(G.timer)}});
+let mouseOn=false;
+$body.addEventListener('mousedown',e=>{if('ontouchstart' in window&&e.sourceCapabilities?.firesTouchEvents)return;if(gStart(e.clientX,e.clientY,e.target)){mouseOn=true;e.preventDefault()}});
+document.addEventListener('mousemove',e=>{if(mouseOn)gMove(e.clientX,e.clientY)});
+document.addEventListener('mouseup',()=>{if(mouseOn){mouseOn=false;if(G.mode==='scroll'){G.cw=null;return}gEnd()}});
+
+// ---------- 노트 편집기 ----------
+const $note=document.getElementById('note'),$ed=document.getElementById('noteEd'),$nt=document.getElementById('noteTitle');
+let noteId=null,noteDate='',notePinned=false,hist=[],lastSnapAt=0,savedRange=null;
+const EMPTY_LINE='<div class="ln"><br></div>';
+document.getElementById('notePin').onclick=()=>{notePinned=!notePinned;document.getElementById('notePin').classList.toggle('on',notePinned)};
+document.getElementById('noteBack').onclick=()=>closeNote();
+document.getElementById('noteDel').onclick=()=>deleteNote();
+function openNote(id){
+  const e=id?L(K).find(x=>x.id===id):null;
+  noteId=e?e.id:null;
+  setCat($note);
+  document.getElementById('noteCat').textContent=MEMO_K[K][0];
+  noteDate=e?e.date:tdy();
+  document.getElementById('noteDate').textContent=fmtD(noteDate);
+  document.getElementById('noteDel').style.display=e?'':'none';
+  notePinned=!!(e&&e.pinned);document.getElementById('notePin').classList.toggle('on',notePinned);
+  $nt.value=e?(e.title||''):'';
+  $ed.innerHTML=e&&e.html?e.html:EMPTY_LINE;
+  normalize();hist=[];after();
+  $ed.scrollTop=0;
+  $note.classList.add('open');
+  if(!e)$nt.focus();
+}
+function closeNote(){
+  normalize();
+  const title=$nt.value.trim(),hasText=!!$ed.textContent.trim(),html=$ed.innerHTML;
+  if(noteId){
+    const e=L(K).find(x=>x.id===noteId);
+    if(!title&&!hasText)M()[K]=L(K).filter(x=>x.id!==noteId);
+    else{
+      if(e.title!==title||e.html!==html){e.title=title;e.html=html;e.updated=Date.now()}
+      if(!!e.pinned!==notePinned){e.pinned=notePinned;e.order=topOrder(notePinned)}
+    }
+  }else if(title||hasText){
+    L(K).push({id:uid(),date:tdy(),title,html,updated:Date.now(),pinned:notePinned,order:topOrder(notePinned)});
+  }
+  save();
+  if(document.activeElement)document.activeElement.blur();
+  $note.classList.remove('open');
+  refreshList();
+}
+async function deleteNote(){
+  if(!noteId||!await ask('이 메모를 삭제할까요?',{ok:'삭제',danger:true}))return;
+  M()[K]=L(K).filter(x=>x.id!==noteId);save();
+  noteId=null;$nt.value='';$ed.innerHTML=EMPTY_LINE;
+  $note.classList.remove('open');refreshList();
+}
+// 모든 줄이 <div class="ln"> 이 되도록 정리
+function normalize(){
+  if(!$ed.firstChild){$ed.innerHTML=EMPTY_LINE;return}
+  [...$ed.childNodes].forEach(n=>{
+    if(n.nodeType===1&&n.tagName==='DIV'){n.classList.add('ln');if(!n.firstChild)n.innerHTML='<br>';return}
+    if(n.nodeType===3&&!n.textContent.length){n.remove();return}
+    if(n.nodeType===1&&n.tagName==='BR'){const d=document.createElement('div');d.className='ln';d.innerHTML='<br>';n.replaceWith(d);return}
+    const d=document.createElement('div');d.className='ln';$ed.insertBefore(d,n);d.appendChild(n);
+  });
+}
+// 숫자 줄 번호 다시 매기기 (같은 들여쓰기끼리 이어서)
+function reindex(){
+  const cnt=[0,0,0,0];
+  [...$ed.children].forEach(l=>{
+    const i=+(l.dataset.indent||0);
+    if(l.dataset.style==='number'){for(let k=i+1;k<4;k++)cnt[k]=0;cnt[i]++;l.dataset.n=cnt[i]+'.'}
+    else{delete l.dataset.n;for(let k=i;k<4;k++)cnt[k]=0}
+  });
+}
+function after(){
+  reindex();
+  $ed.classList.toggle('is-empty',$ed.children.length===1&&!$ed.textContent.length&&!$ed.firstChild.dataset.style);
+  updateTb();
+}
+const lineOf=n=>{while(n&&n!==$ed){if(n.parentNode===$ed)return n;n=n.parentNode}return null};
+function curRange(){
+  const s=getSelection();
+  if(s.rangeCount&&$ed.contains(s.getRangeAt(0).commonAncestorContainer))return s.getRangeAt(0);
+  return savedRange;
+}
+function selLines(){
+  const r=curRange();if(!r)return[];
+  let a=r.startContainer===$ed?($ed.childNodes[r.startOffset]||$ed.lastChild):lineOf(r.startContainer);
+  let b=r.endContainer===$ed?($ed.childNodes[Math.max(0,r.endOffset-1)]||$ed.lastChild):lineOf(r.endContainer);
+  a=a||$ed.firstChild;b=b||a;
+  const out=[];let n=a;while(n){out.push(n);if(n===b)break;n=n.nextElementSibling}
+  return out;
+}
+function snapH(force){
+  const now=Date.now();
+  if(!force&&now-lastSnapAt<700)return;
+  lastSnapAt=now;
+  const h=$ed.innerHTML;if(hist[hist.length-1]!==h)hist.push(h);
+  if(hist.length>80)hist.shift();
+}
+function caretToEnd(el){
+  const r=document.createRange();r.selectNodeContents(el);r.collapse(false);
+  const s=getSelection();s.removeAllRanges();s.addRange(r);
+}
+function updateTb(){
+  const ls=selLines(),l=ls[0];
+  document.querySelectorAll('#noteTb .tbtn').forEach(b=>{
+    const a=b.dataset.act;let on=false;
+    if(l&&['todo','bullet','dash','number'].includes(a))on=ls.every(x=>x.dataset.style===a);
+    if(l&&a==='indent')on=+(l.dataset.indent||0)>0;
+    if(l&&a==='bigger')on=l.dataset.size==='large';
+    if(l&&a==='smaller')on=l.dataset.size==='small';
+    if(a==='bold'||a==='underline'){try{on=!!curRange()&&document.queryCommandState(a)}catch(e){}}
+    b.classList.toggle('on',on);
+  });
+}
+document.addEventListener('selectionchange',()=>{
+  const s=getSelection();
+  if(s.rangeCount&&$ed.contains(s.getRangeAt(0).commonAncestorContainer)){savedRange=s.getRangeAt(0).cloneRange();updateTb()}
+});
+// 도구 모음: 누를 때 키보드/선택이 풀리지 않게
+const $tb=document.getElementById('noteTb');
+$tb.addEventListener('pointerdown',e=>{if(e.target.closest('.tbtn'))e.preventDefault()});
+$tb.addEventListener('mousedown',e=>{if(e.target.closest('.tbtn'))e.preventDefault()});
+$tb.addEventListener('click',e=>{
+  const b=e.target.closest('.tbtn');if(!b)return;
+  const act=b.dataset.act;
+  if(act==='undo'){if(!hist.length)return;$ed.innerHTML=hist.pop();normalize();$ed.focus();caretToEnd($ed.lastChild);after();return}
+  if(act==='erase'){if(!$ed.textContent.trim())return;ask('메모 내용을 모두 지울까요?',{ok:'지우기',danger:true}).then(y=>{if(!y)return;snapH(true);$ed.innerHTML=EMPTY_LINE;$ed.focus();caretToEnd($ed.firstChild);after()});return}
+  if(act==='selectall'){$ed.focus();const r=document.createRange();r.selectNodeContents($ed);const s=getSelection();s.removeAllRanges();s.addRange(r);savedRange=r.cloneRange();updateTb();return}
+  const r=curRange();
+  if(r&&document.activeElement!==$ed){$ed.focus();const s=getSelection();s.removeAllRanges();s.addRange(r)}
+  const ls=selLines();if(!ls.length)return;
+  snapH(true);
+  if(['todo','bullet','dash','number'].includes(act)){
+    const all=ls.every(l=>l.dataset.style===act);
+    ls.forEach(l=>{if(all)delete l.dataset.style;else l.dataset.style=act;if(all||act!=='todo')delete l.dataset.done});
+  }
+  if(act==='indent')ls.forEach(l=>{const c=+(l.dataset.indent||0);if(c<3)l.dataset.indent=c+1});
+  if(act==='outdent')ls.forEach(l=>{const c=+(l.dataset.indent||0);if(c>1)l.dataset.indent=c-1;else delete l.dataset.indent});
+  if(act==='bigger')ls.forEach(l=>{if(l.dataset.size==='small')delete l.dataset.size;else l.dataset.size='large'});
+  if(act==='smaller')ls.forEach(l=>{if(l.dataset.size==='large')delete l.dataset.size;else l.dataset.size='small'});
+  if(act==='bold'||act==='underline')document.execCommand(act);
+  after();
+});
+function caretAtLineStart(l){
+  const s=getSelection();if(!s.rangeCount||!s.isCollapsed)return false;
+  const r=document.createRange();r.selectNodeContents(l);
+  try{r.setEnd(s.anchorNode,s.anchorOffset)}catch(e){return false}
+  return r.toString().length===0;
+}
+$ed.addEventListener('keydown',e=>{
+  if(e.isComposing||e.keyCode===229)return;
+  const s=getSelection(),l=s.rangeCount?lineOf(s.anchorNode):null;
+  if(e.key==='Enter'&&l){
+    if(l.dataset.style&&!l.textContent.trim()&&s.isCollapsed){
+      e.preventDefault();snapH(true);
+      if(+(l.dataset.indent||0)>0){const c=+l.dataset.indent;if(c>1)l.dataset.indent=c-1;else delete l.dataset.indent}
+      else{delete l.dataset.style;delete l.dataset.done}
+      after();return;
+    }
+    snapH(true);
+    setTimeout(()=>{normalize();const n=lineOf(getSelection().anchorNode);if(n&&n!==l)delete n.dataset.done;after()},0);
+    return;
+  }
+  if(e.key==='Backspace'&&l&&s.isCollapsed&&caretAtLineStart(l)){
+    if(l.dataset.style){e.preventDefault();snapH(true);delete l.dataset.style;delete l.dataset.done;after();return}
+    if(l.dataset.indent){e.preventDefault();snapH(true);const c=+l.dataset.indent;if(c>1)l.dataset.indent=c-1;else delete l.dataset.indent;after();return}
+    if(l===$ed.firstElementChild){e.preventDefault();return}
+  }
+  if(e.key==='Tab'){e.preventDefault();snapH(true);selLines().forEach(x=>{const c=+(x.dataset.indent||0);if(e.shiftKey){if(c>1)x.dataset.indent=c-1;else delete x.dataset.indent}else if(c<3)x.dataset.indent=c+1});after()}
+});
+$ed.addEventListener('beforeinput',()=>snapH());
+$ed.addEventListener('input',()=>{normalize();after()});
+// 붙여넣기는 글자만
+$ed.addEventListener('paste',e=>{
+  e.preventDefault();snapH(true);
+  const t=(e.clipboardData||window.clipboardData).getData('text/plain');
+  document.execCommand('insertText',false,t);
+});
+// 체크 동그라미 누르면 완료 표시
+function onMarker(e){
+  const l=e.target.closest&&e.target.closest('.ln');
+  if(!l||l.dataset.style!=='todo')return null;
+  const ind=+(l.dataset.indent||0)*24,x=e.clientX-l.getBoundingClientRect().left;
+  return (x>=ind-4&&x<=ind+26)?l:null;
+}
+$ed.addEventListener('pointerdown',e=>{if(onMarker(e))e.preventDefault()});
+$ed.addEventListener('click',e=>{
+  const l=onMarker(e);if(!l)return;
+  e.preventDefault();snapH(true);
+  if(l.dataset.done!==undefined)delete l.dataset.done;else l.dataset.done='';
+  after();
+});
+// 제목에서 엔터 → 본문으로
+$nt.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing){e.preventDefault();$ed.focus();caretToEnd($ed.firstChild)}});
+// 각 탭 메모 버튼
+document.addEventListener('click',e=>{const b=e.target.closest('[data-memo]');if(!b)return;openMemo(b.dataset.memo=='prop'?ptK:b.dataset.memo)});
+})();
 </script></body></html>
