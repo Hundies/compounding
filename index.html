@@ -217,6 +217,7 @@ input.cv::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#
 .wh.big .whc div{height:40px;line-height:40px;font-size:26px}
 .rtl{font-size:11px;white-space:nowrap;margin-left:-2px}
 .rstg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}.rstg button{border:1px solid var(--ln);background:none;color:var(--up);border-radius:10px;padding:10px 4px;font:inherit;font-size:13px;font-weight:600}.rstg button.arm{background:var(--up);color:#fff;border-color:var(--up)}
+.srg>div>b span.nw{display:inline!important;white-space:nowrap;font-size:12.5px!important;font-weight:inherit}
 </style></head><body>
 <main>
 <section class="tab on" id="tp"><div id="pfs"></div>
@@ -522,7 +523,7 @@ function opt(){
  <button class="btn r" id="clr" style="margin-top:14px">전체 데이터 초기화</button>
  <button class="btn" id="oz" style="margin-top:6px">닫기</button>`;
  $('#md').classList.add('on');
- const dump=()=>JSON.stringify({i:S.i,h:S.h,bt:S.bt,fx:S.fx,pf:S.pf,pt:S.pt,rate:S.rate,sim:S.sim,auto:S.auto,cl:S.cl,memo:S.memo},null,1);
+ const dump=()=>JSON.stringify({i:S.i,h:S.h,bt:S.bt,fx:S.fx,pf:S.pf,pt:S.pt,rate:S.rate,sim:S.sim,auto:S.auto,cl:S.cl,memo:S.memo,v3n:S.v3n},null,1);
  $('#ox').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([dump()],{type:'application/json'}));a.download='investment-backup-'+todayS()+'.json';document.body.appendChild(a);a.click();a.remove()};
  $('#oc').onclick=async()=>{try{await navigator.clipboard.writeText(dump());alert('백업 내용을 복사했어요')}catch(e){alert('복사가 막혀 있어요. 파일 내보내기를 이용해주세요')}};
  $('#oi').onclick=()=>$('#of').click();
@@ -546,7 +547,7 @@ async function fetchRate(){
 function imp(t){let o;try{o=JSON.parse(t)}catch(e){}
  if(!o||!Array.isArray(o.i)||!Array.isArray(o.h)){alert('올바른 백업 내용이 아니에요');return}
  if(!confirm('현재 데이터를 백업 내용으로 바꿀까요?'))return;
- S={i:o.i,h:o.h,bt:Array.isArray(o.bt)?o.bt:[],fx:Array.isArray(o.fx)?o.fx:[],pf:Array.isArray(o.pf)?o.pf:[],pt:o.pt&&typeof o.pt=='object'?{test:o.pt.test||[],pa:o.pt.pa||[]}:{test:[],pa:[]},rate:+o.rate||1380,auto:o.auto!==false,sim:o.sim||{a:'',m:500000,r:7,y:10},cl:o.cl&&typeof o.cl=='object'?o.cl:undefined,memo:o.memo&&typeof o.memo=='object'?o.memo:{}};mig();snap();$('#md').classList.remove('on');rall();alert('들여왔어요')}
+ S={i:o.i,h:o.h,bt:Array.isArray(o.bt)?o.bt:[],fx:Array.isArray(o.fx)?o.fx:[],pf:Array.isArray(o.pf)?o.pf:[],pt:o.pt&&typeof o.pt=='object'?{test:o.pt.test||[],pa:o.pt.pa||[]}:{test:[],pa:[]},rate:+o.rate||1380,auto:o.auto!==false,sim:o.sim||{a:'',m:500000,r:7,y:10},cl:o.cl&&typeof o.cl=='object'?o.cl:undefined,memo:o.memo&&typeof o.memo=='object'?o.memo:{},v3n:+o.v3n||undefined};mig();snap();$('#md').classList.remove('on');rall();alert('들여왔어요')}
 /* ---------- tab 2 : simulation ---------- */
 /* ---------- tab 1 : bitcoin scalping ---------- */
 const BTG=20000000,BTK={in:['입금','var(--tx)'],out:['출금','#74c0fc'],up:['수익','#39ff96'],dn:['손실','#ff5a5f']};
@@ -657,7 +658,7 @@ function rp(){
  <div class="sb" style="font-size:13px;margin:14px 0 0 2px">Balance</div><div style="font-size:44px;font-weight:800;letter-spacing:-1.2px;line-height:1.15;color:${pc}">${usd(bal)}</div>
  ${prog}
  <div class="card" style="margin-top:20px;padding:12px 8px"><div class="sb" style="font-size:11px;margin:0 0 6px 6px"><i class="dot" style="background:#39ff96"></i><i class="dot" style="background:#ff5a5f;margin-left:2px"></i> 잔고 &nbsp; <i class="dot" style="background:#ff5a5f"></i> MDD &nbsp; <i class="dot" style="background:${k=='test'?'#ffd43b':'#b197fc'}"></i> ${k=='test'?'Profit Target':'Buffer'}</div>${N?ptChart(pts,k):'<div class="empty">거래를 기록하면 그래프가 보여요</div>'}</div>
- <div class="srg">${sr('거래 수',N+'회 (승 '+W+' · 패 '+Ls+')')}${sr('승률',N?(W/N*100).toFixed(1).replace(/\.0$/,'')+'%':'-')}${sr('누적 손익',usdS(pl),cc(pl))}${sr('거래당 평균',N?usdS(r2c(pl/N)):'-',N?cc(pl):'')}${sr('일관성',cons==null?'-':cons.toFixed(1).replace(/\.0$/,'')+'%<span style="display:inline;font-size:inherit;font-weight:inherit;color:var(--tx)"> / '+(PCON*100)+'%</span>',cons==null?'':cons>PCON*100?'#ff5a5f':'#39ff96')}${cons>PCON*100?sr('필요 수익',usd(needT)+' 이상',''):''}${(()=>{const zc=u=>u<.5?'#39ff96':u<.7?'#ffd43b':u<.9?'#ffa94d':'#ff5a5f',rem=Math.max(0,buf);return sr('최대낙폭',usd(mdd),zc(mdd/PD))+sr('손실한도',usd(rem)+'<span style="display:inline;font-size:inherit;font-weight:inherit;color:var(--tx)"> / '+usd(PD)+'</span>',zc((PD-rem)/PD))})()}${k=='test'?sr('V3 테스트',N>=30?'달성':(30-N)+'회 남음')+sr('예상 통과일',ptEta(L,pl,TG)[0]):''}</div>
+ <div class="srg">${sr('거래 수',N+'회 ('+W+'승 <span style="display:inline;font-size:inherit;color:'+(W>Ls?'#39ff96':W<Ls?'#ff5a5f':'var(--tx)')+'">'+(W>Ls?'&gt;':W<Ls?'&lt;':'=')+'</span> '+Ls+'패)')}${sr('승률',N?(W/N*100).toFixed(1).replace(/\.0$/,'')+'%':'-',N?(W/N>=.4?'#39ff96':W/N<.25?'#ff5a5f':''):'')}${sr('거래당 평균',N?usdS(r2c(pl/N)):'-',N?cc(pl):'')}${sr('일관성',cons==null?'-':cons.toFixed(1).replace(/\.0$/,'')+'%<span style="display:inline;font-size:inherit;font-weight:inherit;color:var(--tx)"> / '+(PCON*100)+'%</span>',cons==null?'':cons>PCON*100?'#ff5a5f':'#39ff96')}${(()=>{const zc=u=>u<.5?'#39ff96':u<.7?'#ffd43b':u<.9?'#ffa94d':'#ff5a5f',zw=u=>u<.5?'':zc(u),rem=Math.max(0,buf);return sr('MDD',usd(mdd),zw(mdd/PD))+sr('손실한도','<span class="nw">'+usd(rem)+'<span style="display:inline;font-size:inherit;font-weight:inherit;color:var(--tx)"> / '+usd(PD)+'</span></span>',zc((PD-rem)/PD))})()}${k=='test'?sr('V3 테스트','<span id="v3n" style="display:inline;font-size:inherit;font-weight:inherit;border-bottom:1px dashed var(--sb);cursor:pointer">'+(N>=(S.v3n||30)?'달성':((S.v3n||30)-N)+'회 남음')+'</span>')+sr('예상 통과일','<span class="nw">'+ptEta(L,pl,TG)[0]+'</span>'):''}</div>
  <div class="mh" style="margin-top:22px"><button data-pm="-1">◀</button><span>${ptM.slice(0,4)}년 ${+ptM.slice(5)}월</span><button data-pm="1">▶</button></div>
  <div class="rs"><div><span class="sb">월 손익</span><b style="color:${cc(mPl)}">${usdS(mPl)}</b></div><div><span class="sb">월 승/패</span><b>${mW}승 ${mL}패</b></div></div>
  <div class="card" style="padding:2px 12px;margin-top:10px">${rows||'<div class="empty" style="padding:24px 10px">이 달에는 기록이 없어요</div>'}</div>${feeCard(k)}${k=='pa'?feeCard('out'):''}`;
@@ -917,6 +918,13 @@ if(S.auto!==false)fetchRate();
 document.addEventListener('visibilitychange',()=>{nl();if(!document.hidden&&S.auto!==false&&Date.now()-(S.rateAt||0)>36e5)fetchRate()});
 
 
+
+/* ---------- Prop: V3 테스트 목표 횟수 ---------- */
+document.addEventListener('click',e=>{if(!e.target.closest('#v3n'))return;
+ $('#mb').innerHTML=`<h2 style="font-size:16px;color:var(--tx)">V3 테스트 목표 횟수</h2><label class="f">총 몇 회까지 테스트할까요?<input id="v3i" type="number" inputmode="numeric" value="${S.v3n||30}"></label><div class="g2" style="margin-top:14px"><button class="btn g" id="v3x">취소</button><button class="btn" id="v3s">저장</button></div>`;
+ $('#md').classList.add('on');const i=$('#v3i');i.focus();i.select();
+ $('#v3x').onclick=()=>$('#md').classList.remove('on');
+ $('#v3s').onclick=()=>{const v=Math.round(+i.value);if(!(v>0&&v<10000)){i.focus();return}S.v3n=v;save();$('#md').classList.remove('on');rp()}});
 /* ---------- 설정: 탭별 기록 초기화 ---------- */
 document.addEventListener('click',e=>{const b=e.target.closest('[data-rst]');if(!b)return;const k=b.dataset.rst,lb={fx:'FX',test:'Prop Eval',pa:'Prop PA',bt:'Crypto',lt:'Long-term'}[k];
  if(!b.classList.contains('arm')){b.classList.add('arm');b.textContent='한 번 더';setTimeout(()=>{if(b.isConnected){b.classList.remove('arm');b.textContent=lb}},4000);return}
