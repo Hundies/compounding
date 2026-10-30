@@ -758,7 +758,7 @@ function pfAt(d,last){
  bv=sm(S.bt,x=>x.t=='in'||x.t=='out'?x.a:0),bw=sm(S.bt,x=>x.a),
  fv=sm(S.fx,x=>x.t=='pl'?0:x.a),fp=sm(S.fx,x=>x.t=='pl'?x.a:0),
  pv=sm(S.pf,x=>x.k=='out'?0:x.a),pw=sm(S.pf,x=>x.k=='out'?x.a:0);
- return[['FX','#20c997',fv,fv+fp*R],['Prop (PA)','#f06595',pv,pw],['Crypto','#ffa94d',bv,bw],['Long-term','#5b9bff',as[0],as[1]]]}
+ return[['FX','#20c997',fv,fv+fp*R],['Prop (PA)','#f06595',0,pw-pv],['Crypto','#ffa94d',bv,bw],['Long-term','#5b9bff',as[0],as[1]]]}
 function rP(){
  const ds=[...new Set([...S.i.flatMap(h=>(h.e||[]).filter(x=>+x.a).map(x=>x.d)),...S.bt.map(x=>x.d),...S.fx.map(x=>x.d),...S.pf.map(x=>x.d)])].sort(),
  N=ds.length,K=Math.min(N,9),pts=[],sum=a=>a.reduce((t,q)=>[t[0]+q[2],t[1]+q[3]],[0,0]);
