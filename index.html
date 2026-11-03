@@ -257,7 +257,7 @@ if(!S.pt||typeof S.pt!='object')S.pt={};['test','pa'].forEach(k=>{if(!Array.isAr
 if(S.demo){S.i=S.i.filter(x=>!/^s\d$/.test(x.id));S.h=[];delete S.demo}
 const save=()=>{try{localStorage.setItem('inv1',JSON.stringify(S))}catch(e){}};
 const mul=h=>h.c=='USD'?S.rate:1,val=h=>(+h.v||0)*mul(h);
-function mig(){S.pf.forEach(x=>{if(x.u!='w'){x.a=Math.round((+x.a||0)*(S.rate||1380));x.u='w'}});S.i.forEach(h=>{if(h.v==null)h.v=(+h.q||0)*(+h.p||0);if(!CATS[h.cat])h.cat='테스터';if(!Array.isArray(h.w))h.w=(h.w!=null&&h.w!==''&&isFinite(+h.w))?[{d:todayS(),a:+h.w}]:[];if(!Array.isArray(h.e))h.e=+h.v?[{d:todayS(),a:+h.v}]:[];h.v=Math.round(h.e.reduce((t,x)=>t+(+x.a||0),0)*100)/100})}
+function mig(){S.fx.forEach(x=>{if(x.u!='$'){if(x.t!='pl')x.a=Math.round((+x.a||0)/(S.rate||1380)*100)/100;x.u='$'}});S.pf.forEach(x=>{if(x.u!='w'){x.a=Math.round((+x.a||0)*(S.rate||1380));x.u='w'}});S.i.forEach(h=>{if(h.v==null)h.v=(+h.q||0)*(+h.p||0);if(!CATS[h.cat])h.cat='테스터';if(!Array.isArray(h.w))h.w=(h.w!=null&&h.w!==''&&isFinite(+h.w))?[{d:todayS(),a:+h.w}]:[];if(!Array.isArray(h.e))h.e=+h.v?[{d:todayS(),a:+h.v}]:[];h.v=Math.round(h.e.reduce((t,x)=>t+(+x.a||0),0)*100)/100})}
 const tot=()=>S.i.reduce((t,h)=>t+val(h),0);
 const sumTo=(h,d)=>(h.e||[]).reduce((t,x)=>x.d<=d?t+x.a:t,0);
 const evAt=(h,d)=>{let L=null;(h.w||[]).forEach(x=>{if(x.d<=d&&(!L||x.d>=L.d))L=x});return L?L.a+(h.e||[]).reduce((t,x)=>x.d>L.d&&x.d<=d?t+x.a:t,0):sumTo(h,d)};
@@ -281,7 +281,7 @@ function p10(){
 function chart10(P,H=330){
  const pts=P.pts,n=pts.length,W=340,pl=22,pr=22,pt=30,pb=38,all=pts.flatMap(p=>[p.v,p.w]);let mn=Math.min(...all),mx=Math.max(...all);if(mn==mx){mn-=1;mx+=1}
  const pd=(mx-mn)*.06;mn-=pd;mx+=pd;const X=i=>pl+i*(W-pl-pr)/(n-1),Y=v=>pt+(mx-v)*(H-pt-pb)/(mx-mn),B=H-pb+4,G='#39ff96',R='#ff5a5f',WH='#ffffff',IL='rgba(255,255,255,.75)',
- sc=d=>d>0?G:d<0?R:WH,C=(p,i)=>i==0?WH:sc(p.w-p.v),vl=v=>v==0?'0':fm(v),
+ sc=d=>d>0?G:d<0?R:WH,C=(p,i)=>i==0?WH:sc(p.w-p.v),vl=v=>v==0?'0':P.usd?(v<0?'-$':'$')+Math.abs(+v.toFixed(1)).toLocaleString('en-US'):fm(v),
  dl=p=>p.lab||(P.sd>365?p.d.slice(2,4)+'.'+(+p.d.slice(5,7)):(+p.d.slice(5,7))+'/'+(+p.d.slice(8))),
  f1=n=>n.toFixed(1),T=(x,y,t,c,w,fs)=>`<text x="${f1(x)}" y="${f1(y)}" text-anchor="middle" style="fill:${c};font-size:${fs||8}px;font-weight:${w}">${t}</text>`,
  poly=(q,c)=>`<polygon points="${q.map(p=>f1(p[0])+','+f1(p[1])).join(' ')}" fill="${c}" fill-opacity=".38"/>`,
@@ -708,47 +708,48 @@ const usdA=n=>'$'+Math.abs(n).toLocaleString('en-US',{maximumFractionDigits:2}),
 let fxM=null;
 const fxSum=(d)=>{const L=S.fx;return{net:L.reduce((t,x)=>t+(x.d<=d&&x.t!='pl'?x.a:0),0),pl:r2c(L.reduce((t,x)=>t+(x.d<=d&&x.t=='pl'?x.a:0),0))}};
 function fxP(){
- const L=S.fx;if(!L.length)return null;const R=S.rate||1380,
- ds=[...new Set(L.map(x=>x.d))].sort(),N=ds.length,K=Math.min(N,9),pts=[{d:ds[0],v:0,w:0,lab:'시작'}];
- for(let k=1;k<=K;k++){const d=ds[Math.ceil(k*N/K)-1],q=fxSum(d);pts.push({d,v:Math.round(q.net),w:Math.round(q.net+q.pl*R)})}
+ const L=S.fx;if(!L.length)return null;
+ const ds=[...new Set(L.map(x=>x.d))].sort(),N=ds.length,K=Math.min(N,9),pts=[{d:ds[0],v:0,w:0,lab:'시작'}];
+ for(let k=1;k<=K;k++){const d=ds[Math.ceil(k*N/K)-1],q=fxSum(d);pts.push({d,v:r2c(q.net),w:r2c(q.net+q.pl)})}
  const D=x=>new Date(x+'T00:00:00');
- return{pts,first:ds[0],sd:Math.round((D(ds[N-1])-D(ds[0]))/864e5)}}
+ return{pts,first:ds[0],sd:Math.round((D(ds[N-1])-D(ds[0]))/864e5),usd:true}}
 function rF(){
  const R=S.rate||1380,cm=todayS().slice(0,7);if(!fxM)fxM=cm;
- const ML=S.fx.filter(x=>x.d.startsWith(fxM)),mIn=ML.reduce((t,x)=>t+(x.t=='in'?x.a:0),0),mOut=ML.reduce((t,x)=>t-(x.t=='out'?x.a:0),0),mPl=r2c(ML.reduce((t,x)=>t+(x.t=='pl'?x.a:0),0));
- const L=S.fx,dep=L.reduce((t,x)=>t+(x.t=='in'?x.a:0),0),wd=L.reduce((t,x)=>t-(x.t=='out'?x.a:0),0),net=dep-wd,pl=fxSum('9999-12-31').pl,plW=pl*R,bal=net+plW,pc=pnl(net,bal),P=fxP(),
+ const ML=S.fx.filter(x=>x.d.startsWith(fxM)),mIn=r2c(ML.reduce((t,x)=>t+(x.t=='in'?x.a:0),0)),mOut=r2c(ML.reduce((t,x)=>t-(x.t=='out'?x.a:0),0)),mPl=r2c(ML.reduce((t,x)=>t+(x.t=='pl'?x.a:0),0));
+ const L=S.fx,dep=r2c(L.reduce((t,x)=>t+(x.t=='in'?x.a:0),0)),wd=r2c(L.reduce((t,x)=>t-(x.t=='out'?x.a:0),0)),net=r2c(dep-wd),pl=fxSum('9999-12-31').pl,bal=r2c(net+pl),pc=pnl(net,bal),P=fxP(),
  kind=x=>x.t=='in'?'in':x.t=='out'?'out':x.a>=0?'up':'dn',
- rows=ML.map((x,i)=>[x,i]).sort((p,q)=>q[0].d.localeCompare(p[0].d)||q[1]-p[1]).map(([x])=>{const k=kind(x),isP=x.t=='pl';return`<div class="li" data-fid="${x.id}" style="align-items:center;cursor:pointer"><em>${x.d.slice(5).replace('-','/')}</em><span style="flex:1;color:var(--sb)">${FXK[k][0]}</span><b style="color:${FXK[k][1]}">${k=='in'||k=='up'?'+':'-'}${isP?usdA(x.a):'₩'+fmt(Math.abs(x.a))}</b></div>`}).join(''),
- sr=(l,v,c)=>`<div style="display:flex;align-items:baseline;gap:30px;margin:3px 2px 0;font-size:13px"><span class="sb" style="width:44px;flex:none;font-size:11px;display:flex;justify-content:space-between">${[...l.replace(/ /g,'')].map(c=>`<span>${c}</span>`).join('')}</span><b style="font-size:16px;color:${c||'var(--tx)'}">${v}</b></div>`,
- sg=n=>n>0?'+':n<0?'-':'';
- $('#tf').innerHTML=`<div style="display:flex;align-items:flex-start;gap:8px"><div style="flex:1;min-width:0"><div class="sb" style="font-size:13px;margin:4px 0 0 2px">Balance</div><div style="font-size:44px;font-weight:800;letter-spacing:-1.2px;line-height:1.15;color:${pc}">₩${fmt(bal)}</div><div class="sb" style="font-size:11px;margin:2px 0 0 2px">손익은 현재 환율 ₩${fmt(R)}로 환산</div></div><div style="display:flex;gap:8px;flex:none"><button class="mmo" data-memo="fx" aria-label="메모"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M9 12h7M9 16h5"/></svg></button><button id="fxadd" aria-label="기록 추가"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
- <div class="card" style="margin-top:22px"><div class="sb" style="font-size:11px;margin:0 0 6px 2px"><i class="dot" style="background:#fff"></i> 입금·출금 반영 &nbsp; <i class="dot" style="background:#39ff96"></i><i class="dot" style="background:#ff5a5f;margin-left:2px"></i> 현재 금액</div>${P?chart10(P,200):'<div class="empty">입금이나 손익을 기록하면 그래프가 보여요</div>'}</div>
- <div class="srg">${sr('누적 입금','₩'+fmt(dep))}${wd?sr('누적 출금','₩'+fmt(wd),'#74c0fc'):''}${sr('누적 손익',usdSg(pl)+(pl?` <span class="sb" style="font-size:12px;font-weight:400">(${sg(plW)}₩${fmt(Math.abs(plW))})</span>`:''),pnl(0,pl))}${sr('ROI',dep>0?sp(plW/dep*100):'-',pnl(0,pl))}</div>
+ rows=ML.map((x,i)=>[x,i]).sort((p,q)=>q[0].d.localeCompare(p[0].d)||q[1]-p[1]).map(([x])=>{const k=kind(x);return`<div class="li" data-fid="${x.id}" style="align-items:center;cursor:pointer"><em>${x.d.slice(5).replace('-','/')}</em><span style="flex:1;color:var(--sb)">${FXK[k][0]}</span><b style="color:${FXK[k][1]}">${k=='in'||k=='up'?'+':'-'}${usdA(x.a)}</b></div>`}).join(''),
+ sr=(l,v,c)=>`<div style="display:flex;align-items:baseline;gap:30px;margin:3px 2px 0;font-size:13px"><span class="sb" style="width:44px;flex:none;font-size:11px;display:flex;justify-content:space-between">${[...l.replace(/ /g,'')].map(c=>`<span>${c}</span>`).join('')}</span><b style="font-size:16px;color:${c||'var(--tx)'}">${v}</b></div>`;
+ $('#tf').innerHTML=`<div style="display:flex;align-items:flex-start;gap:8px"><div style="flex:1;min-width:0"><div class="sb" style="font-size:13px;margin:4px 0 0 2px">Balance</div><div style="font-size:44px;font-weight:800;letter-spacing:-1.2px;line-height:1.15;color:${pc}">${bal<0?'-':''}${usdA(bal)}</div><div class="sb" style="font-size:11px;margin:2px 0 0 2px">≈ ₩${fmt(bal*R)} (환율 ₩${fmt(R)})</div></div><div style="display:flex;gap:8px;flex:none"><button class="mmo" data-memo="fx" aria-label="메모"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M9 12h7M9 16h5"/></svg></button><button id="fxadd" aria-label="기록 추가"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+ <div class="card" style="margin-top:22px"><div class="sb" style="font-size:11px;margin:0 0 6px 2px"><i class="dot" style="background:#fff"></i> 입금·출금 반영 &nbsp; <i class="dot" style="background:#39ff96"></i><i class="dot" style="background:#ff5a5f;margin-left:2px"></i> 잔고</div>${P?chart10(P,200):'<div class="empty">입금이나 잔고를 기록하면 그래프가 보여요</div>'}</div>
+ <div class="srg">${sr('누적 입금',usdA(dep))}${wd?sr('누적 출금',usdA(wd),'#74c0fc'):''}${sr('누적 손익',usdSg(pl)+(pl?`<span class="sb" style="font-size:12px;font-weight:400">(${pl>0?'+':'-'}₩${fmt(Math.abs(pl*R))})</span>`:''),pnl(0,pl))}${sr('ROI',dep>0?sp(pl/dep*100):'-',pnl(0,pl))}</div>
  <div class="mh" style="margin-top:22px"><button data-fm="-1">◀</button><span>${fxM.slice(0,4)}년 ${+fxM.slice(5)}월</span><button data-fm="1">▶</button></div>
- <div class="rs" style="grid-template-columns:1fr 1fr 1fr"><div><span class="sb">월 입금</span><b style="font-size:15px">₩${fmt(mIn)}</b></div><div><span class="sb">월 출금</span><b style="font-size:15px;color:${mOut?'#74c0fc':'var(--tx)'}">₩${fmt(mOut)}</b></div><div><span class="sb">월 손익</span><b style="font-size:15px;color:${mPl>0?'#39ff96':mPl<0?'#ff5a5f':'var(--tx)'}">${usdSg(mPl)}</b></div></div>
+ <div class="rs" style="grid-template-columns:1fr 1fr 1fr"><div><span class="sb">월 입금</span><b style="font-size:15px">${usdA(mIn)}</b></div><div><span class="sb">월 출금</span><b style="font-size:15px;color:${mOut?'#74c0fc':'var(--tx)'}">${usdA(mOut)}</b></div><div><span class="sb">월 손익</span><b style="font-size:15px;color:${mPl>0?'#39ff96':mPl<0?'#ff5a5f':'var(--tx)'}">${usdSg(mPl)}</b></div></div>
  <div class="card" style="padding:2px 12px;margin-top:10px">${rows||'<div class="empty" style="padding:24px 10px">이 달에는 기록이 없어요</div>'}</div>`}
 function fxEdit(id){
- const o=S.fx.find(x=>x.id==id);let k=o?(o.t=='in'?'in':o.t=='out'?'out':'pl'):'in',sg=o&&o.t=='pl'&&o.a<0?-1:1;
+ const o=S.fx.find(x=>x.id==id);let k=o?(o.t=='in'?'in':o.t=='out'?'out':'pl'):'in';
+ const pv=()=>prevBal(S.fx,$('#f_d').value,o,0);
  $('#mb').innerHTML=`<h2 style="font-size:16px;color:var(--tx)">${o?'기록 수정':'기록 추가'}</h2>
- <div class="seg" id="f_k"><button data-k="in">입금</button><button data-k="out">출금</button><button data-k="pl">손익</button></div>
- <div class="seg" id="f_g"><button data-g="1">수익</button><button data-g="-1">손실</button></div>
+ <div class="seg" id="f_k"><button data-k="in">입금</button><button data-k="out">출금</button><button data-k="pl">잔고</button></div>
  <label class="f">날짜<input id="f_d" type="date" value="${o?o.d:todayS()}"></label>
- <label class="f"><span id="f_l"></span><input id="f_a" type="number" inputmode="decimal" placeholder="금액"></label>
+ <label class="f"><span id="f_l"></span><input id="f_a" type="number" inputmode="decimal" placeholder="금액 ($)"></label>
  <div id="f_h" style="font-size:13px;margin-top:8px;min-height:18px"></div>
  <button class="btn" id="f_s" style="margin-top:16px">저장</button>
  ${o?'<button class="btn r" id="f_x" style="margin-top:6px">삭제</button>':''}
  <button class="btn g" id="f_c" style="margin-top:6px">닫기</button>`;
- const up=()=>{$$('#f_k button').forEach(b=>b.classList.toggle('on',b.dataset.k==k));$$('#f_g button').forEach(b=>b.classList.toggle('on',+b.dataset.g==sg));$('#f_g').style.display=k=='pl'?'flex':'none';
-  $('#f_l').textContent=k=='in'?'입금 금액 (원)':k=='out'?'출금 금액 (원)':'손익 금액 ($)';
-  const v=Math.abs(+$('#f_a').value||0);$('#f_h').innerHTML=k=='pl'&&v?`<span class="sb">≈ </span><b style="color:${sg>0?'#39ff96':'#ff5a5f'}">${sg>0?'+':'-'}₩${fmt(v*(S.rate||1380))}</b><span class="sb"> (환율 ₩${fmt(S.rate||1380)})</span>`:''};
- if(o)$('#f_a').value=Math.abs(o.a);
+ const dl=()=>r2c((+$('#f_a').value||0)-pv()),
+ up=()=>{$$('#f_k button').forEach(b=>b.classList.toggle('on',b.dataset.k==k));
+  $('#f_l').textContent=k=='in'?'입금 금액 ($)':k=='out'?'출금 금액 ($)':'지금 잔고 ($)';
+  const h=$('#f_h');if(k!='pl'){h.innerHTML='';return}
+  const v=$('#f_a').value,p=pv();if(v===''){h.innerHTML=`<span class="sb">이전 잔고 ${usdA(p)} · 지금 잔고를 입력하면 손익이 계산돼요</span>`;return}
+  const d=dl();h.innerHTML=`<span class="sb">이전 잔고 ${usdA(p)} → </span><b style="color:${d>0?'#39ff96':d<0?'#ff5a5f':'var(--sb)'}">${d>0?'수익 +'+usdA(d):d<0?'손실 -'+usdA(d):'변동 없음'}</b>`};
+ if(o)$('#f_a').value=k=='pl'?r2c(pv()+o.a):Math.abs(o.a);
  up();
  $$('#f_k button').forEach(b=>b.onclick=()=>{if(k!=b.dataset.k){k=b.dataset.k;$('#f_a').value=''}up()});
- $$('#f_g button').forEach(b=>b.onclick=()=>{sg=+b.dataset.g;up()});
- $('#f_a').oninput=up;$('#f_c').onclick=()=>$('#md').classList.remove('on');
- $('#f_s').onclick=()=>{const d=$('#f_d').value,v=Math.abs(+$('#f_a').value||0);if(!v||!d){$('#f_a').focus();return}
-  const a=k=='in'?Math.round(v):k=='out'?-Math.round(v):sg*r2c(v);
-  const e={id:o?o.id:'x'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),d,t:k,a};
+ $('#f_a').oninput=up;$('#f_d').onchange=up;$('#f_c').onclick=()=>$('#md').classList.remove('on');
+ $('#f_s').onclick=()=>{const d=$('#f_d').value,v=$('#f_a').value;if(v===''||!d){$('#f_a').focus();return}
+  const a=k=='in'?r2c(Math.abs(+v)):k=='out'?-r2c(Math.abs(+v)):dl();if(!a){$('#f_a').focus();return}
+  const e={id:o?o.id:'x'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),d,t:k,a,u:'$'};
   if(o)S.fx[S.fx.indexOf(o)]=e;else S.fx.push(e);fxM=d.slice(0,7);save();$('#md').classList.remove('on');rF();rP()};
  if(o)$('#f_x').onclick=function(){if(this.dataset.a){S.fx=S.fx.filter(x=>x!=o);save();$('#md').classList.remove('on');rF();rP()}else{this.dataset.a=1;this.textContent='한 번 더 누르면 삭제돼요';setTimeout(()=>{if(this.isConnected){delete this.dataset.a;this.textContent='삭제'}},4000)}};
  $('#md').classList.add('on')}
@@ -757,7 +758,7 @@ function pfAt(d,last){
  const R=S.rate||1380,sm=(L,f)=>L.reduce((t,x)=>t+(x.d<=d?f(x):0),0),
  as=last?[tot(),totV()]:[S.i.reduce((t,h)=>t+sumTo(h,d)*mul(h),0),S.i.reduce((t,h)=>t+evAt(h,d)*mul(h),0)],
  bv=sm(S.bt,x=>x.t=='in'||x.t=='out'?x.a:0),bw=sm(S.bt,x=>x.a),
- fv=sm(S.fx,x=>x.t=='pl'?0:x.a),fp=sm(S.fx,x=>x.t=='pl'?x.a:0),
+ fv=sm(S.fx,x=>x.t=='pl'?0:x.a)*R,fp=sm(S.fx,x=>x.t=='pl'?x.a:0),
  pv=sm(S.pf,x=>x.k=='out'?0:x.a),pw=sm(S.pf,x=>x.k=='out'?x.a:0);
  return[['FX','#20c997',fv,fv+fp*R],['Prop (PA)','#f06595',0,pw-pv],['Crypto','#ffa94d',bv,bw],['Long-term','#5b9bff',as[0],as[1]]]}
 function rP(){
@@ -946,7 +947,7 @@ function addEx(){
   {id:id(),n:'TLT (예시)',cat:'채권',c:'USD',e:[{d:dAgo(80),a:1500}],w:[{d:dAgo(7),a:1460}]},
   {id:id(),n:'관심종목 (예시)',cat:'테스터',c:'KRW',lu:true,e:[],w:[]});
  // FX: 입금(원) · 손익($)
- S.fx.push({id:id(),d:dAgo(45),t:'in',a:2000000},{id:id(),d:dAgo(40),t:'pl',a:85.5},{id:id(),d:dAgo(33),t:'pl',a:-42},{id:id(),d:dAgo(25),t:'pl',a:120.25},{id:id(),d:dAgo(18),t:'out',a:-300000},{id:id(),d:dAgo(12),t:'pl',a:-30},{id:id(),d:dAgo(4),t:'pl',a:64});
+ S.fx.push({id:id(),d:dAgo(45),t:'in',a:1500,u:'$'},{id:id(),d:dAgo(40),t:'pl',a:85.5,u:'$'},{id:id(),d:dAgo(33),t:'pl',a:-42,u:'$'},{id:id(),d:dAgo(25),t:'pl',a:120.25,u:'$'},{id:id(),d:dAgo(18),t:'out',a:-200,u:'$'},{id:id(),d:dAgo(12),t:'pl',a:-30,u:'$'},{id:id(),d:dAgo(4),t:'pl',a:64,u:'$'});
  // Prop: Eval·PA 거래($), 비용·출금(원)
  [[20,250],[19,-180],[17,420],[16,-150],[13,310],[11,-220],[9,380],[6,275],[4,-130],[2,350]].forEach(([n,a])=>S.pt.test.push({id:id(),d:dAgo(n),a}));
  [[8,300],[7,-120],[5,410],[3,-90],[1,260]].forEach(([n,a])=>S.pt.pa.push({id:id(),d:dAgo(n),a}));
