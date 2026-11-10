@@ -726,11 +726,12 @@ function rF(){
  <div class="mh" style="margin-top:22px"><button data-fm="-1">◀</button><span>${fxM.slice(0,4)}년 ${+fxM.slice(5)}월</span><button data-fm="1">▶</button></div>
  <div class="rs" style="grid-template-columns:1fr 1fr 1fr"><div><span class="sb">월 입금</span><b style="font-size:15px">${usdA(mIn)}</b></div><div><span class="sb">월 출금</span><b style="font-size:15px;color:${mOut?'#74c0fc':'var(--tx)'}">${usdA(mOut)}</b></div><div><span class="sb">월 손익</span><b style="font-size:15px;color:${mPl>0?'#39ff96':mPl<0?'#ff5a5f':'var(--tx)'}">${usdSg(mPl)}</b></div></div>
  <div class="card" style="padding:2px 12px;margin-top:10px">${rows||'<div class="empty" style="padding:24px 10px">이 달에는 기록이 없어요</div>'}</div>`}
+function fxNorm(){const L=S.fx,ix=L.map((x,j)=>j).sort((p,q)=>L[p].d.localeCompare(L[q].d)||((L[p].t=='pl')-(L[q].t=='pl'))||p-q);let run=0;ix.forEach(j=>{const x=L[j];if(x.t=='pl'&&x.b!=null){x.a=Math.round((x.b-run)*100)/100;run=x.b}else run=Math.round((run+(+x.a||0))*100)/100})}
 function fxEdit(id){
- const o=S.fx.find(x=>x.id==id);let k=o?(o.t=='in'?'in':o.t=='out'?'out':'pl'):'in';
- const pv=()=>prevBal(S.fx,$('#f_d').value,o,0);
+ const o=S.fx.find(x=>x.id==id);let k=o?(o.t=='in'?'in':o.t=='out'?'out':'pl'):'pl';
+ const pv=()=>{const d=$('#f_d').value,i=o?S.fx.indexOf(o):S.fx.length;return S.fx.reduce((t,x,j)=>x===o?t:(x.d<d||(x.d==d&&(x.t!='pl'||j<i)))?t+x.a:t,0)};
  $('#mb').innerHTML=`<h2 style="font-size:16px;color:var(--tx)">${o?'기록 수정':'기록 추가'}</h2>
- <div class="seg" id="f_k"><button data-k="in">입금</button><button data-k="out">출금</button><button data-k="pl">잔고</button></div>
+ <div class="seg" id="f_k"><button data-k="pl">잔고</button><button data-k="in">입금</button><button data-k="out">출금</button></div>
  <label class="f">날짜<input id="f_d" type="date" value="${o?o.d:todayS()}"></label>
  <label class="f"><span id="f_l"></span><input id="f_a" type="number" inputmode="decimal" placeholder="금액 ($)"></label>
  <div id="f_h" style="font-size:13px;margin-top:8px;min-height:18px"></div>
@@ -743,15 +744,15 @@ function fxEdit(id){
   const h=$('#f_h');if(k!='pl'){h.innerHTML='';return}
   const v=$('#f_a').value,p=pv();if(v===''){h.innerHTML=`<span class="sb">이전 잔고 ${usdA(p)} · 지금 잔고를 입력하면 손익이 계산돼요</span>`;return}
   const d=dl();h.innerHTML=`<span class="sb">이전 잔고 ${usdA(p)} → </span><b style="color:${d>0?'#39ff96':d<0?'#ff5a5f':'var(--sb)'}">${d>0?'수익 +'+usdA(d):d<0?'손실 -'+usdA(d):'변동 없음'}</b>`};
- if(o)$('#f_a').value=k=='pl'?r2c(pv()+o.a):Math.abs(o.a);
+ if(o)$('#f_a').value=k=='pl'?(o.b!=null?o.b:r2c(pv()+o.a)):Math.abs(o.a);
  up();
  $$('#f_k button').forEach(b=>b.onclick=()=>{if(k!=b.dataset.k){k=b.dataset.k;$('#f_a').value=''}up()});
  $('#f_a').oninput=up;$('#f_d').onchange=up;$('#f_c').onclick=()=>$('#md').classList.remove('on');
  $('#f_s').onclick=()=>{const d=$('#f_d').value,v=$('#f_a').value;if(v===''||!d){$('#f_a').focus();return}
-  const a=k=='in'?r2c(Math.abs(+v)):k=='out'?-r2c(Math.abs(+v)):dl();if(!a){$('#f_a').focus();return}
-  const e={id:o?o.id:'x'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),d,t:k,a,u:'$'};
-  if(o)S.fx[S.fx.indexOf(o)]=e;else S.fx.push(e);fxM=d.slice(0,7);save();$('#md').classList.remove('on');rF();rP()};
- if(o)$('#f_x').onclick=function(){if(this.dataset.a){S.fx=S.fx.filter(x=>x!=o);save();$('#md').classList.remove('on');rF();rP()}else{this.dataset.a=1;this.textContent='한 번 더 누르면 삭제돼요';setTimeout(()=>{if(this.isConnected){delete this.dataset.a;this.textContent='삭제'}},4000)}};
+  const a=k=='in'?r2c(Math.abs(+v)):k=='out'?-r2c(Math.abs(+v)):dl();if(!a&&k!='pl'){$('#f_a').focus();return}
+  const e={id:o?o.id:'x'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),d,t:k,a,u:'$'};if(k=='pl')e.b=r2c(+v);
+  if(o)S.fx[S.fx.indexOf(o)]=e;else S.fx.push(e);fxNorm();fxM=d.slice(0,7);save();$('#md').classList.remove('on');rF();rP()};
+ if(o)$('#f_x').onclick=function(){if(this.dataset.a){S.fx=S.fx.filter(x=>x!=o);fxNorm();save();$('#md').classList.remove('on');rF();rP()}else{this.dataset.a=1;this.textContent='한 번 더 누르면 삭제돼요';setTimeout(()=>{if(this.isConnected){delete this.dataset.a;this.textContent='삭제'}},4000)}};
  $('#md').classList.add('on')}
 /* ---------- tab 0 : portfolio (all) ---------- */
 function pfAt(d,last){
