@@ -220,6 +220,9 @@ input.cv::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#
 .srg>div>b span.nw{display:inline!important;white-space:nowrap;font-size:12.5px!important;font-weight:inherit}
 .fxs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.fxs>div{background:var(--pn);border-radius:12px;padding:8px 12px;display:flex;flex-direction:column;gap:2px}.fxs span{font-size:11px}.fxs b{font-size:16px}
 #f_sy button{font-size:13px}
+.accr{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px 0}.accr::-webkit-scrollbar{display:none}
+.acc{flex:none;border:1px solid var(--ln);background:var(--pn);color:var(--sb);border-radius:18px;height:34px;padding:0 13px;font:inherit;font-size:13px;font-weight:600;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.acc.on{background:var(--pn2);color:var(--tx);border-color:#f06595}.acc.end{opacity:.55}.acc i{width:7px;height:7px;border-radius:50%}.acc.add{width:34px;padding:0;justify-content:center;font-size:16px}
 </style></head><body>
 <main>
 <section class="tab on" id="tp"><div id="pfs"></div>
@@ -255,7 +258,9 @@ let S;try{S=JSON.parse(localStorage.getItem('inv1'))}catch(e){}
 if(!S)S={i:[],rate:1380,h:[],auto:true,sim:{a:'',m:500000,r:7,y:10}};
 if(!S.sim)S.sim={a:'',m:500000,r:7,y:10};
 if(!Array.isArray(S.bt))S.bt=[];if(!Array.isArray(S.fx))S.fx=[];if(!Array.isArray(S.pf))S.pf=[];
-if(!S.pt||typeof S.pt!='object')S.pt={};['test','pa'].forEach(k=>{if(!Array.isArray(S.pt[k]))S.pt[k]=[]});
+if(!S.pt||typeof S.pt!='object')S.pt={};
+if(!Array.isArray(S.acc))S.acc=[{id:'test',n:'Eval 1',t:'test',st:'on'},{id:'pa',n:'PA 1',t:'pa',st:'on'}];
+S.acc.forEach(a=>{if(!Array.isArray(S.pt[a.id]))S.pt[a.id]=[]});S.pf.forEach(x=>{if(x.k=='out'&&!x.ac)x.ac='pa'});
 if(S.demo){S.i=S.i.filter(x=>!/^s\d$/.test(x.id));S.h=[];delete S.demo}
 const save=()=>{try{localStorage.setItem('inv1',JSON.stringify(S))}catch(e){}};
 const mul=h=>h.c=='USD'?S.rate:1,val=h=>(+h.v||0)*mul(h);
@@ -520,12 +525,12 @@ function opt(){
  <div class="g2"><button class="btn g" id="exadd">예시 넣기</button><button class="btn g" id="exdel">예시 지우기</button></div>
  <p class="sb" style="font-size:12px;margin-top:8px">모든 탭에 예시 기록·메모를 넣어요. 예시만 따로 표시돼서 '지우기'를 누르면 직접 쓴 기록은 그대로 남아요.</p>
  <h2 style="margin-top:22px">기록 초기화</h2>
- <div class="rstg"><button data-rst="fx">FX</button><button data-rst="test">Prop Eval</button><button data-rst="pa">Prop PA</button><button data-rst="bt">Crypto</button><button data-rst="lt">Long-term</button></div>
+ <div class="rstg"><button data-rst="fx">FX</button><button data-rst="prop">Prop 전체</button><button data-rst="bt">Crypto</button><button data-rst="lt">Long-term</button></div>
  <p class="sb" style="font-size:12px;margin-top:8px">한 번 누르면 확인 문구가 나오고, 4초 안에 한 번 더 눌러야 지워져요. 메모는 지워지지 않아요.</p>
  <button class="btn r" id="clr" style="margin-top:14px">전체 데이터 초기화</button>
  <button class="btn" id="oz" style="margin-top:6px">닫기</button>`;
  $('#md').classList.add('on');
- const dump=()=>JSON.stringify({i:S.i,h:S.h,bt:S.bt,fx:S.fx,pf:S.pf,pt:S.pt,rate:S.rate,sim:S.sim,auto:S.auto,cl:S.cl,memo:S.memo,v3n:S.v3n,fxs:S.fxs},null,1);
+ const dump=()=>JSON.stringify({i:S.i,h:S.h,bt:S.bt,fx:S.fx,pf:S.pf,pt:S.pt,rate:S.rate,sim:S.sim,auto:S.auto,cl:S.cl,memo:S.memo,v3n:S.v3n,fxs:S.fxs,acc:S.acc},null,1);
  $('#ox').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([dump()],{type:'application/json'}));a.download='investment-backup-'+todayS()+'.json';document.body.appendChild(a);a.click();a.remove()};
  $('#oc').onclick=async()=>{try{await navigator.clipboard.writeText(dump());alert('백업 내용을 복사했어요')}catch(e){alert('복사가 막혀 있어요. 파일 내보내기를 이용해주세요')}};
  $('#oi').onclick=()=>$('#of').click();
@@ -549,7 +554,7 @@ async function fetchRate(){
 function imp(t){let o;try{o=JSON.parse(t)}catch(e){}
  if(!o||!Array.isArray(o.i)||!Array.isArray(o.h)){alert('올바른 백업 내용이 아니에요');return}
  if(!confirm('현재 데이터를 백업 내용으로 바꿀까요?'))return;
- S={i:o.i,h:o.h,bt:Array.isArray(o.bt)?o.bt:[],fx:Array.isArray(o.fx)?o.fx:[],pf:Array.isArray(o.pf)?o.pf:[],pt:o.pt&&typeof o.pt=='object'?{test:o.pt.test||[],pa:o.pt.pa||[]}:{test:[],pa:[]},rate:+o.rate||1380,auto:o.auto!==false,sim:o.sim||{a:'',m:500000,r:7,y:10},cl:o.cl&&typeof o.cl=='object'?o.cl:undefined,memo:o.memo&&typeof o.memo=='object'?o.memo:{},v3n:+o.v3n||undefined};mig();snap();$('#md').classList.remove('on');rall();alert('들여왔어요')}
+ S={i:o.i,h:o.h,bt:Array.isArray(o.bt)?o.bt:[],fx:Array.isArray(o.fx)?o.fx:[],pf:Array.isArray(o.pf)?o.pf:[],pt:o.pt&&typeof o.pt=='object'?o.pt:{},acc:Array.isArray(o.acc)?o.acc:undefined,rate:+o.rate||1380,auto:o.auto!==false,sim:o.sim||{a:'',m:500000,r:7,y:10},cl:o.cl&&typeof o.cl=='object'?o.cl:undefined,memo:o.memo&&typeof o.memo=='object'?o.memo:{},v3n:+o.v3n||undefined};mig();snap();$('#md').classList.remove('on');rall();alert('들여왔어요')}
 /* ---------- tab 2 : simulation ---------- */
 /* ---------- tab 1 : bitcoin scalping ---------- */
 const BTG=20000000,BTK={in:['입금','var(--tx)'],out:['출금','#74c0fc'],up:['수익','#39ff96'],dn:['손실','#ff5a5f']};
@@ -638,7 +643,9 @@ function ptEta(L,pl,tg){
  const dd=Math.round((d-T)/864e5);
  return[`${d.getMonth()+1}월 ${d.getDate()}일 (D-${dd})`]}
 function rp(){
- const k=ptK,L=S.pt[k],pts=ptSeries(L),last=pts[pts.length-1],bal=last.bal,pl=last.pl,liq=last.liq,buf=r2c(bal-liq),mdd=(()=>{let pk=PB,m=0;pts.forEach(p=>{pk=Math.max(pk,p.bal);m=Math.max(m,pk-p.bal)});return r2c(m)})(),N=L.length,byD=L.reduce((o,x)=>(o[x.d]=(o[x.d]||0)+x.a,o),{}),dmx=Math.max(0,...Object.values(byD)),cons=pl>0&&dmx>0?dmx/pl*100:null,needT=r2c(dmx/PCON),TG=Math.max(PTG,needT),W=L.filter(x=>x.a>0).length,Ls=L.filter(x=>x.a<0).length,
+ if(!S.acc.length){$('#t2').innerHTML=`<div class="accr">${accChips()}</div><div class="empty" style="margin-top:40px">＋ 버튼으로 계좌를 추가해 주세요</div>`;return}
+ const A=S.acc.find(a=>a.id==ptK)||S.acc.find(a=>a.st=='on')||S.acc[0];ptK=A.id;
+ const k=A.t,L=S.pt[A.id],pts=ptSeries(L),last=pts[pts.length-1],bal=last.bal,pl=last.pl,liq=last.liq,buf=r2c(bal-liq),mdd=(()=>{let pk=PB,m=0;pts.forEach(p=>{pk=Math.max(pk,p.bal);m=Math.max(m,pk-p.bal)});return r2c(m)})(),N=L.length,byD=L.reduce((o,x)=>(o[x.d]=(o[x.d]||0)+x.a,o),{}),dmx=Math.max(0,...Object.values(byD)),cons=pl>0&&dmx>0?dmx/pl*100:null,needT=r2c(dmx/PCON),TG=Math.max(PTG,needT),W=L.filter(x=>x.a>0).length,Ls=L.filter(x=>x.a<0).length,
  cm=todayS().slice(0,7),ms=L.map(x=>x.d.slice(0,7)).concat(cm).sort(),mn=ms[0],mx=ms[ms.length-1];
  if(!ptM)ptM=cm;
  const ML=L.filter(x=>x.d.startsWith(ptM)),mPl=r2c(ML.reduce((t,x)=>t+x.a,0)),mW=ML.filter(x=>x.a>0).length,mL=ML.filter(x=>x.a<0).length,
@@ -656,18 +663,18 @@ function rp(){
   <div style="position:relative;height:16px;border-radius:8px;background:var(--pn2);margin-top:5px"><div style="height:100%;width:${F.toFixed(1)}%;background:#39ff96;border-radius:8px"></div><i style="position:absolute;left:${T.toFixed(1)}%;top:-3px;width:2px;height:22px;background:#b197fc;transform:translateX(-1px)"></i><i style="position:absolute;right:0;top:-3px;width:2px;height:22px;background:#ffd43b"></i></div>
   <div style="position:relative;height:18px;margin-top:5px"><b style="position:absolute;${fs};font-size:12px;color:${fl};white-space:nowrap">${usdS(d)}</b></div></div>`},
  prog=k=='test'?ebar(pl):pbar(bal);
- $('#t2').innerHTML=`<div style="display:flex;align-items:center;gap:8px"><div class="seg" style="flex:1;margin-top:0"><button data-pk="test" class="${k=='test'?'on':''}">Eval</button><button data-pk="pa" class="${k=='pa'?'on':''}">PA</button></div><button class="mmo" data-memo="prop" aria-label="메모"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M9 12h7M9 16h5"/></svg></button><button id="ptadd" aria-label="기록 추가"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button></div>
- <div class="sb" style="font-size:13px;margin:14px 0 0 2px">Balance</div><div style="font-size:44px;font-weight:800;letter-spacing:-1.2px;line-height:1.15;color:${pc}">${usd(bal)}</div>
+ $('#t2').innerHTML=`<div style="display:flex;align-items:center;gap:8px"><div class="accr" style="flex:1;min-width:0">${accChips()}</div><button class="mmo" data-memo="prop" aria-label="메모"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M9 12h7M9 16h5"/></svg></button><button id="ptadd" aria-label="기록 추가"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button></div>
+ <div class="sb" style="font-size:13px;margin:14px 0 0 2px">${esc(A.n)} · Balance${A.st!='on'?` <span style="color:${A.st=='pass'?'#39ff96':'#ff5a5f'}">(${A.st=='pass'?'통과':'탈락'})</span>`:''}</div><div style="font-size:44px;font-weight:800;letter-spacing:-1.2px;line-height:1.15;color:${pc}">${usd(bal)}</div>
  ${prog}
  <div class="card" style="margin-top:20px;padding:12px 8px"><div class="sb" style="font-size:11px;margin:0 0 6px 6px"><i class="dot" style="background:#39ff96"></i><i class="dot" style="background:#ff5a5f;margin-left:2px"></i> 잔고 &nbsp; <i class="dot" style="background:#ff5a5f"></i> MDD &nbsp; <i class="dot" style="background:${k=='test'?'#ffd43b':'#b197fc'}"></i> ${k=='test'?'Profit Target':'Buffer'}</div>${N?ptChart(pts,k):'<div class="empty">거래를 기록하면 그래프가 보여요</div>'}</div>
  <div class="srg">${sr('거래 수',N+'회 ('+W+'승 <span style="display:inline;font-size:inherit;color:'+(W>Ls?'#39ff96':W<Ls?'#ff5a5f':'var(--tx)')+'">'+(W>Ls?'&gt;':W<Ls?'&lt;':'=')+'</span> '+Ls+'패)')}${sr('승률',N?(W/N*100).toFixed(1).replace(/\.0$/,'')+'%':'-',N?(W/N>=.4?'#39ff96':W/N<.25?'#ff5a5f':''):'')}${sr('거래당 평균',N?usdS(r2c(pl/N)):'-',N?cc(pl):'')}${sr('일관성',cons==null?'-':cons.toFixed(1).replace(/\.0$/,'')+'%<span style="display:inline;font-size:inherit;font-weight:inherit;color:var(--tx)"> / '+(PCON*100)+'%</span>',cons==null?'':cons>PCON*100?'#ff5a5f':'#39ff96')}${(()=>{const zc=u=>u<.5?'#39ff96':u<.7?'#ffd43b':u<.9?'#ffa94d':'#ff5a5f',zw=u=>u<.5?'':zc(u),rem=Math.max(0,buf);return sr('MDD',usd(mdd),zw(mdd/PD))+sr('손실한도','<span class="nw">'+usd(rem)+'<span style="display:inline;font-size:inherit;font-weight:inherit;color:var(--tx)"> / '+usd(PD)+'</span></span>',zc((PD-rem)/PD))})()}${k=='test'?sr('V3 테스트','<span id="v3n" style="display:inline;font-size:inherit;font-weight:inherit;border-bottom:1px dashed var(--sb);cursor:pointer">'+(N>=(S.v3n||30)?'달성':((S.v3n||30)-N)+'회 남음')+'</span>')+sr('예상 통과일','<span class="nw">'+ptEta(L,pl,TG)[0]+'</span>'):''}</div>
  <div class="mh" style="margin-top:22px"><button data-pm="-1">◀</button><span>${ptM.slice(0,4)}년 ${+ptM.slice(5)}월</span><button data-pm="1">▶</button></div>
  <div class="rs"><div><span class="sb">월 손익</span><b style="color:${cc(mPl)}">${usdS(mPl)}</b></div><div><span class="sb">월 승/패</span><b>${mW}승 ${mL}패</b></div></div>
- <div class="card" style="padding:2px 12px;margin-top:10px">${rows||'<div class="empty" style="padding:24px 10px">이 달에는 기록이 없어요</div>'}</div>${feeCard(k)}${k=='pa'?feeCard('out'):''}`;
+ <div class="card" style="padding:2px 12px;margin-top:10px">${rows||'<div class="empty" style="padding:24px 10px">이 달에는 기록이 없어요</div>'}</div>${feeCard('fee',A)}${k=='pa'?feeCard('out',A):''}`;
  const w=$('#ptw');if(w)w.scrollLeft=w.scrollWidth}
 function ptEdit(id){
  const L=S.pt[ptK],o=L.find(x=>x.id==id),pv=()=>r2c(prevBal(L,$('#p_d').value||todayS(),o,PB));
- $('#mb').innerHTML=`<h2 style="font-size:16px;color:var(--tx)">${ptK=='test'?'Eval':'PA'} ${o?'기록 수정':'기록 추가'}</h2>
+ $('#mb').innerHTML=`<h2 style="font-size:16px;color:var(--tx)">${esc((S.acc.find(a=>a.id==ptK)||{n:''}).n)} ${o?'기록 수정':'기록 추가'}</h2>
  <label class="f">날짜<input id="p_d" type="date" value="${o?o.d:todayS()}"></label>
  <label class="f">현재 잔고 ($)<input id="p_a" type="number" inputmode="decimal" placeholder="예: 50300"></label>
  <div id="p_h" style="font-size:13px;margin-top:8px;min-height:18px"></div>
@@ -687,10 +694,37 @@ function ptEdit(id){
  if(o)$('#p_x').onclick=function(){if(this.dataset.a){S.pt[ptK]=L.filter(x=>x!=o);save();$('#md').classList.remove('on');rp()}else{this.dataset.a=1;this.textContent='한 번 더 누르면 삭제돼요';setTimeout(()=>{if(this.isConnected){delete this.dataset.a;this.textContent='삭제'}},4000)}};
  $('#md').classList.add('on')}
 
-const feeCard=k=>{const FL=S.pf.filter(x=>x.k==k).sort((a,b)=>b.d.localeCompare(a.d)),sum=FL.reduce((t,x)=>t+x.a,0),nm=(K=>K=='test'?'Eval 비용':K=='pa'?'PA 비용':'PA 출금')(k);
- return`<div style="display:flex;align-items:center;justify-content:space-between;margin-top:26px;padding:0 2px"><div><span class="sb" style="font-size:13px">${nm} ${k=='out'?'(+)':'(입금)'}</span><b style="display:block;font-size:20px;margin-top:2px">₩${fmt(sum)}</b></div><button id="${k=='out'?'poadd':'pfadd'}" class="btn g" style="width:auto;margin:0;padding:7px 16px;font-size:13px">+ 추가</button></div>${FL.length?`<div class="card" style="padding:2px 12px;margin-top:8px">${FL.map(x=>`<div class="li" data-feid="${x.id}" style="align-items:center;cursor:pointer"><em>${x.d.slice(5).replace('-','/')}</em><span style="flex:1;color:var(--sb)">${nm}</span><b>₩${fmt(x.a)}</b></div>`).join('')}</div>`:''}`};
+function accChips(){const o=[...S.acc.filter(a=>a.st=='on'),...S.acc.filter(a=>a.st!='on')];
+ return o.map(a=>`<button data-pk="${a.id}" class="acc${a.id==ptK?' on':''}${a.st!='on'?' end':''}">${a.st!='on'?`<i style="background:${a.st=='pass'?'#39ff96':'#ff5a5f'}"></i>`:''}${esc(a.n)}</button>`).join('')+'<button class="acc add" id="accadd" aria-label="계좌 추가">＋</button>'}
+function accEdit(id,pre){
+ const o=S.acc.find(a=>a.id==id),p=pre||{};let t=o?o.t:(p.t||'test'),st=o?o.st:'on';
+ const nx=t=>{const re=t=='test'?/^Eval (\d+)$/:/^PA (\d+)$/;return(t=='test'?'Eval ':'PA ')+(Math.max(0,...S.acc.map(a=>(a.n.match(re)||[])[1]||0).map(Number))+1)};
+ $('#mb').innerHTML=`<h2 style="font-size:16px;color:var(--tx)">${o?'계좌 설정':'계좌 추가'}</h2>
+ <div class="seg" id="ac_t"><button data-t="test">Eval</button><button data-t="pa">PA</button></div>
+ <label class="f">이름<input id="ac_n" type="text" value="${o?esc(o.n):nx(t)}"></label>
+ ${o?`<label class="f">상태</label><div class="seg" id="ac_st" style="margin-top:4px"><button data-s="on">진행 중</button><button data-s="pass">통과</button><button data-s="fail">탈락</button></div>`:`<label class="f">구매 비용 (원, 선택)<input id="ac_f" type="number" inputmode="numeric" placeholder="예: 200000"></label><label class="f">구매일<input id="ac_d" type="date" value="${todayS()}"></label>`}
+ <button class="btn" id="ac_s" style="margin-top:16px">저장</button>
+ ${o&&o.t=='test'?'<button class="btn g" id="ac_pa" style="margin-top:6px">통과 → PA 계좌 만들기</button>':''}
+ ${o?'<button class="btn r" id="ac_x" style="margin-top:6px">계좌 삭제</button>':''}
+ <button class="btn g" id="ac_c" style="margin-top:6px">닫기</button>`;
+ let auto=!o;
+ const up=()=>{$$('#ac_t button').forEach(b=>b.classList.toggle('on',b.dataset.t==t));$$('#ac_st button').forEach(b=>b.classList.toggle('on',b.dataset.s==st))};up();
+ $$('#ac_t button').forEach(b=>b.onclick=()=>{t=b.dataset.t;if(auto)$('#ac_n').value=nx(t);up()});
+ $('#ac_n').oninput=()=>auto=false;
+ $$('#ac_st button').forEach(b=>b.onclick=()=>{st=b.dataset.s;up()});
+ $('#ac_c').onclick=()=>$('#md').classList.remove('on');
+ $('#ac_s').onclick=()=>{const n=$('#ac_n').value.trim();if(!n){$('#ac_n').focus();return}
+  if(o){o.n=n;o.t=t;o.st=st}else{const a={id:'a'+Date.now().toString(36),n,t,st:'on'};S.acc.push(a);S.pt[a.id]=[];ptK=a.id;ptM=null;
+   const f=Math.round(Math.abs(+$('#ac_f').value||0)),d=$('#ac_d').value||todayS();if(f)S.pf.push({id:'f'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),d,k:a.id,a:f,u:'w'})}
+  save();$('#md').classList.remove('on');rp();rP()};
+ if(o&&o.t=='test')$('#ac_pa').onclick=()=>{o.st='pass';save();accEdit(null,{t:'pa'})};
+ if(o)$('#ac_x').onclick=function(){if(this.dataset.a){S.acc=S.acc.filter(a=>a!=o);delete S.pt[o.id];S.pf=S.pf.filter(x=>x.k!=o.id&&!(x.k=='out'&&x.ac==o.id));if(S.memo)delete S.memo[o.id];ptK=(S.acc[0]||{}).id;ptM=null;save();$('#md').classList.remove('on');rp();rP()}else{this.dataset.a=1;this.textContent='한 번 더 누르면 기록·비용까지 삭제돼요';setTimeout(()=>{if(this.isConnected){delete this.dataset.a;this.textContent='계좌 삭제'}},4000)}};
+ $('#md').classList.add('on');if(!o)setTimeout(()=>{},0)}
+const feeNm=(K,ac)=>K=='out'?'PA 출금':((S.acc.find(a=>a.id==K)||{t:'test'}).t=='test'?'Eval 비용':'PA 비용');
+const feeCard=(kind,A)=>{const FL=S.pf.filter(x=>kind=='out'?x.k=='out'&&x.ac==A.id:x.k==A.id).sort((a,b)=>b.d.localeCompare(a.d)),sum=FL.reduce((t,x)=>t+x.a,0),nm=kind=='out'?'PA 출금':(A.t=='test'?'Eval 비용':'PA 비용');
+ return`<div style="display:flex;align-items:center;justify-content:space-between;margin-top:26px;padding:0 2px"><div><span class="sb" style="font-size:13px">${nm} ${kind=='out'?'(+)':'(입금)'}</span><b style="display:block;font-size:20px;margin-top:2px">₩${fmt(sum)}</b></div><button id="${kind=='out'?'poadd':'pfadd'}" class="btn g" style="width:auto;margin:0;padding:7px 16px;font-size:13px">+ 추가</button></div>${FL.length?`<div class="card" style="padding:2px 12px;margin-top:8px">${FL.map(x=>`<div class="li" data-feid="${x.id}" style="align-items:center;cursor:pointer"><em>${x.d.slice(5).replace('-','/')}</em><span style="flex:1;color:var(--sb)">${nm}</span><b>₩${fmt(x.a)}</b></div>`).join('')}</div>`:''}`};
 function feEdit(id,kk){
- const o=S.pf.find(x=>x.id==id),K=o?o.k:(kk||ptK),nm=(K=>K=='test'?'Eval 비용':K=='pa'?'PA 비용':'PA 출금')(K);
+ const o=S.pf.find(x=>x.id==id),K=o?o.k:(kk=='out'?'out':ptK),AC=o?o.ac:ptK,nm=feeNm(K,AC);
  $('#mb').innerHTML=`<h2 style="font-size:16px;color:var(--tx)">${nm} ${o?'수정':'추가'}</h2>
  <label class="f">날짜<input id="e_d" type="date" value="${o?o.d:todayS()}"></label>
  <label class="f">${nm} (원)<input id="e_a" type="number" inputmode="numeric" placeholder="예: 200000"></label>
@@ -700,7 +734,7 @@ function feEdit(id,kk){
  if(o)$('#e_a').value=o.a;
  $('#e_c').onclick=()=>$('#md').classList.remove('on');
  $('#e_s').onclick=()=>{const d=$('#e_d').value,a=Math.round(Math.abs(+$('#e_a').value||0));if(!d||!a){$('#e_a').focus();return}
-  const e={id:o?o.id:'f'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),d,k:K,a,u:'w'};
+  const e={id:o?o.id:'f'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),d,k:K,a,u:'w'};if(K=='out')e.ac=AC;
   if(o)S.pf[S.pf.indexOf(o)]=e;else S.pf.push(e);save();$('#md').classList.remove('on');rp();rP()};
  if(o)$('#e_x').onclick=function(){if(this.dataset.a){S.pf=S.pf.filter(x=>x!=o);save();$('#md').classList.remove('on');rp();rP()}else{this.dataset.a=1;this.textContent='한 번 더 누르면 삭제돼요';setTimeout(()=>{if(this.isConnected){delete this.dataset.a;this.textContent='삭제'}},4000)}};
  $('#md').classList.add('on')}
@@ -887,7 +921,8 @@ document.addEventListener('click',e=>{const c=s=>e.target.closest(s);let b;
  else if(b=c('#bmrst')){const m=btM;if(b.dataset.a){S.bt=S.bt.filter(x=>!x.d.startsWith(m));save();rb()}else{b.dataset.a=1;b.textContent='한 번 더 누르면 '+(+m.slice(5))+'월 기록이 삭제돼요';setTimeout(()=>{if(b.isConnected){delete b.dataset.a;b.textContent=(+m.slice(5))+'월 기록 초기화'}},4000)}}
  else if(b=c('#barst')){if(b.dataset.a){S.bt=[];save();rb()}else{b.dataset.a=1;b.textContent='한 번 더 누르면 단타 기록이 모두 삭제돼요';setTimeout(()=>{if(b.isConnected){delete b.dataset.a;b.textContent='단타 전체 초기화'}},4000)}}
  else if(b=c('#ptrst')){if(b.dataset.a){S.pt[ptK]=[];ptM=null;save();rp()}else{b.dataset.a=1;b.textContent='한 번 더 누르면 기록이 모두 삭제돼요';setTimeout(()=>{if(b.isConnected){delete b.dataset.a;b.textContent=(ptK=='test'?'Eval':'PA')+' 초기화'}},4000)}}
- else if(b=c('[data-pk]')){ptK=b.dataset.pk;ptM=null;rp()}
+ else if(b=c('[data-pk]')){if(b.dataset.pk==ptK)accEdit(ptK);else{ptK=b.dataset.pk;ptM=null;rp()}}
+ else if(c('#accadd'))accEdit(null);
  else if(b=c('[data-pid]'))ptEdit(b.dataset.pid);
  else if(b=c('[data-pm]')){if(!b.disabled){const[y,m]=ptM.split('-').map(Number),d=new Date(y,m-1+ +b.dataset.pm,1);ptM=d.getFullYear()+'-'+pad(d.getMonth()+1);rp()}}
  else if(b=c('[data-bm]')){if(!b.disabled){const[y,m]=btM.split('-').map(Number),d=new Date(y,m-1+ +b.dataset.bm,1);btM=d.getFullYear()+'-'+pad(d.getMonth()+1);rb()}}
@@ -934,9 +969,9 @@ document.addEventListener('click',e=>{if(!e.target.closest('#v3n'))return;
  $('#v3x').onclick=()=>$('#md').classList.remove('on');
  $('#v3s').onclick=()=>{const v=Math.round(+i.value);if(!(v>0&&v<10000)){i.focus();return}S.v3n=v;save();$('#md').classList.remove('on');rp()}});
 /* ---------- 설정: 탭별 기록 초기화 ---------- */
-document.addEventListener('click',e=>{const b=e.target.closest('[data-rst]');if(!b)return;const k=b.dataset.rst,lb={fx:'FX',test:'Prop Eval',pa:'Prop PA',bt:'Crypto',lt:'Long-term'}[k];
+document.addEventListener('click',e=>{const b=e.target.closest('[data-rst]');if(!b)return;const k=b.dataset.rst,lb={fx:'FX',prop:'Prop 전체',bt:'Crypto',lt:'Long-term'}[k];
  if(!b.classList.contains('arm')){b.classList.add('arm');b.textContent='한 번 더';setTimeout(()=>{if(b.isConnected){b.classList.remove('arm');b.textContent=lb}},4000);return}
- if(k=='fx'){S.fx=[];fxM=null}else if(k=='bt'){S.bt=[];btM=null}else if(k=='test'||k=='pa'){S.pt[k]=[];S.pf=S.pf.filter(x=>k=='pa'?(x.k!='pa'&&x.k!='out'):x.k!='test');ptM=null}else if(k=='lt'){S.i=[];S.h=[];S.cl={a:'',w:{}}}
+ if(k=='fx'){S.fx=[];fxM=null}else if(k=='bt'){S.bt=[];btM=null}else if(k=='prop'){S.acc.forEach(a=>S.pt[a.id]=[]);S.pf=[];ptM=null}else if(k=='lt'){S.i=[];S.h=[];S.cl={a:'',w:{}}}
  save();snap();rall();b.classList.remove('arm');b.textContent=lb+' ✓';setTimeout(()=>{if(b.isConnected)b.textContent=lb},1500)});
 /* ---------- 테스트용 예시 데이터 ---------- */
 (()=>{
@@ -945,7 +980,7 @@ const dAgo=n=>{const d=new Date();d.setDate(d.getDate()-n);return d.getFullYear(
 let c=0;const id=()=>'ex_'+(c++).toString(36)+Math.random().toString(36).slice(2,6);
 const ln=(t,st)=>`<div class="ln"${st?` data-style="${st}"`:''}>${t}</div>`;
 function addEx(){
- if([...S.i,...S.fx,...S.bt,...S.pf,...S.pt.test,...S.pt.pa].some(isEx))return false;
+ if([...S.i,...S.fx,...S.bt,...S.pf,...Object.values(S.pt).flat()].some(isEx))return false;if(!S.pt.test)S.pt.test=[];if(!S.pt.pa)S.pt.pa=[];['test','pa'].forEach(k=>{if(!S.acc.some(a=>a.id==k))S.acc.push({id:k,n:k=='test'?'Eval 1':'PA 1',t:k,st:'on'})});
  // Long-term 종목
  S.i.push(
   {id:id(),n:'SCHD (예시)',cat:'배당',c:'USD',e:[{d:dAgo(120),a:3000},{d:dAgo(90),a:500},{d:dAgo(60),a:500},{d:dAgo(30),a:500}],w:[{d:dAgo(10),a:4720}]},
@@ -958,7 +993,7 @@ function addEx(){
  // Prop: Eval·PA 거래($), 비용·출금(원)
  [[20,250],[19,-180],[17,420],[16,-150],[13,310],[11,-220],[9,380],[6,275],[4,-130],[2,350]].forEach(([n,a])=>S.pt.test.push({id:id(),d:dAgo(n),a}));
  [[8,300],[7,-120],[5,410],[3,-90],[1,260]].forEach(([n,a])=>S.pt.pa.push({id:id(),d:dAgo(n),a}));
- S.pf.push({id:id(),d:dAgo(22),k:'test',a:230000,u:'w'},{id:id(),d:dAgo(9),k:'pa',a:120000,u:'w'},{id:id(),d:dAgo(1),k:'out',a:700000,u:'w'});
+ S.pf.push({id:id(),d:dAgo(22),k:'test',a:230000,u:'w'},{id:id(),d:dAgo(9),k:'pa',a:120000,u:'w'},{id:id(),d:dAgo(1),k:'out',ac:'pa',a:700000,u:'w'});
  // Crypto 단타(원)
  S.bt.push({id:id(),d:dAgo(30),t:'in',a:1000000},{id:id(),d:dAgo(28),t:'pl',a:42000},{id:id(),d:dAgo(24),t:'pl',a:-18000},{id:id(),d:dAgo(20),t:'pl',a:65000},{id:id(),d:dAgo(15),t:'in',a:500000},{id:id(),d:dAgo(11),t:'pl',a:-27000},{id:id(),d:dAgo(7),t:'pl',a:38000},{id:id(),d:dAgo(3),t:'out',a:-200000},{id:id(),d:dAgo(1),t:'pl',a:21000});
  // 메모
@@ -972,7 +1007,7 @@ function addEx(){
  return true}
 function delEx(){
  S.i=S.i.filter(x=>!isEx(x));S.fx=S.fx.filter(x=>!isEx(x));S.bt=S.bt.filter(x=>!isEx(x));S.pf=S.pf.filter(x=>!isEx(x));
- S.pt.test=S.pt.test.filter(x=>!isEx(x));S.pt.pa=S.pt.pa.filter(x=>!isEx(x));
+ Object.keys(S.pt).forEach(k=>S.pt[k]=S.pt[k].filter(x=>!isEx(x)));
  if(S.memo)Object.keys(S.memo).forEach(k=>{if(Array.isArray(S.memo[k]))S.memo[k]=S.memo[k].filter(x=>!isEx(x))})}
 document.addEventListener('click',e=>{
  const b=e.target.closest('#exadd,#exdel');if(!b)return;
@@ -1036,7 +1071,7 @@ function ask(msg,o={}){
 let K='fx';
 const $ml=document.getElementById('mmL'),$body=document.getElementById('mmBody');
 const setCat=el=>{el.style.setProperty('--cat',MEMO_K[K][1]);el.style.setProperty('--catSoft',soft(MEMO_K[K][1]))};
-window.openMemo=k=>{K=k;M();setCat($ml);document.getElementById('mlT').innerHTML=`<i></i>${MEMO_K[K][0]} 메모`;refreshList();$ml.classList.add('on');$body.scrollTop=0};
+window.openMemo=k=>{const ac=(S.acc||[]).find(a=>a.id==k);if(ac)MEMO_K[k]=[ac.n,'#f06595'];if(!MEMO_K[k])MEMO_K[k]=['Prop','#f06595'];if(!S.memo)S.memo={};if(!Array.isArray(S.memo[k]))S.memo[k]=[];K=k;M();setCat($ml);document.getElementById('mlT').innerHTML=`<i></i>${MEMO_K[K][0]} 메모`;refreshList();$ml.classList.add('on');$body.scrollTop=0};
 document.getElementById('mlX').onclick=()=>$ml.classList.remove('on');
 document.getElementById('mlAdd').onclick=()=>openNote();
 $ml.addEventListener('click',e=>{if(e.target===$ml)$ml.classList.remove('on')});
